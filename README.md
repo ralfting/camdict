@@ -15,7 +15,7 @@ A simple command line to use Cambridge Dictionary in the terminal
 ### How use it
 
 ```
-camdic dictionary house
-// or
-camdic d house
+camdict dictionary house
+// or use alias for 'dictionary'
+camdict d house
 ```
