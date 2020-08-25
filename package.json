@@ -1,6 +1,6 @@
 {
-  "name": "camdic",
-  "version": "1.0.3",
+  "name": "camdict",
+  "version": "1.0.4 ",
   "description": "This is a simple dictionary of english from Cambridge.",
   "main": "cli.js",
   "bin": {

@@ -1,4 +1,4 @@
-# Camdic
+# Camdict
 
 CLI of Cambridge Dictionary
 
@@ -10,7 +10,7 @@ A simple command line to use Cambridge Dictionary in the terminal
 
 ### Installing
 
-> npm i camdic -g
+> npm i camdict -g
 
 ### How use it
 
