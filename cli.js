@@ -6,7 +6,7 @@ const cheerio = require("cheerio");
 const chalk = require("chalk");
 const ora = require("ora");
 
-require("yargs")
+yargs
   .command({
     command: "dictionary [value]",
     aliases: ["d"],
