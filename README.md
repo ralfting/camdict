@@ -12,7 +12,7 @@ A simple command line to use Cambridge Dictionary in the terminal
 
 > npm i camdic -g
 
-### Executing program
+### How use it
 
 ```
 camdic dictionary house
