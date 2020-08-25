@@ -1,10 +1,10 @@
 {
   "name": "camdict",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This is a simple dictionary of english from Cambridge.",
   "main": "cli.js",
   "bin": {
-    "camdic": "./cli.js"
+    "camdict": "./cli.js"
   },
   "dependencies": {
     "chalk": "^4.1.0",
