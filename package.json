@@ -2,7 +2,10 @@
   "name": "cambridge-dictionary",
   "version": "1.0.0",
   "description": "This is a simple dictionary of english from Cambridge.",
-  "main": "app.js",
+  "main": "cli.js",
+  "bin": {
+    "camdi": "./cli.js"
+  },
   "dependencies": {
     "chalk": "^4.1.0",
     "cheerio": "^1.0.0-rc.3",
