@@ -1,11 +1,13 @@
 {
-  "name": "notesApp",
+  "name": "cambridge-dictionary",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a simple dictionary of english from Cambridge.",
   "main": "app.js",
   "dependencies": {
+    "chalk": "^4.1.0",
     "cheerio": "^1.0.0-rc.3",
     "node-fetch": "^2.6.0",
+    "ora": "^5.0.0",
     "yargs": "^15.4.1"
   },
   "devDependencies": {},
