@@ -39,7 +39,7 @@ async function handler(argv) {
 
 async function getWordMean(value) {
   const response = await fetch(
-    `https://dictionary.cambridge.org/dicionario/ingles/${value}`
+    `https://dictionary.cambridge.org/dictionary/english/${value}`
   );
 
   return response;

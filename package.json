@@ -1,10 +1,10 @@
 {
-  "name": "cambridge-dictionary",
+  "name": "camdic",
   "version": "1.0.0",
   "description": "This is a simple dictionary of english from Cambridge.",
   "main": "cli.js",
   "bin": {
-    "camdi": "./cli.js"
+    "camdic": "./cli.js"
   },
   "dependencies": {
     "chalk": "^4.1.0",
@@ -14,10 +14,17 @@
     "yargs": "^15.4.1"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "scripts": {},
+  "keywords": [
+    "dictionary"
+  ],
+  "author": "Ralph Effting",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com:ralfting/camdic.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "bugs": {
+    "url": "https://github.com/ralfting/camdic/issues"
+  }
 }
