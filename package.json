@@ -1,6 +1,6 @@
 {
   "name": "camdict",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "This is a simple dictionary of english from Cambridge.",
   "main": "cli.js",
   "bin": {
@@ -20,12 +20,12 @@
   ],
   "author": "Ralph Effting",
   "license": "MIT",
-  "homepage": "https://github.com/ralfting/camdic/blob/master/README.md",
+  "homepage": "https://github.com/ralfting/camdict/blob/master/README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com:ralfting/camdic.git"
+    "url": "git+https://github.com:ralfting/camdict.git"
   },
   "bugs": {
-    "url": "https://github.com/ralfting/camdic/issues"
+    "url": "https://github.com/ralfting/camdict/issues"
   }
 }
