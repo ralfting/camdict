@@ -8,6 +8,11 @@ const ora = require("ora");
 
 yargs
   .command({
+    command: "$0 [value]",
+    desc: "Brings the meaning of the word",
+    handler,
+  })
+  .command({
     command: "dictionary [value]",
     aliases: ["d"],
     desc: "Brings the meaning of the word",
@@ -19,7 +24,7 @@ yargs
 async function handler(argv) {
   const { value } = argv;
 
-  if (!value) return console.warn("No word informed");
+  if (!value) return console.warn("No word provided");
 
   try {
     const spinner = ora("Searching in dictionary...").start();
