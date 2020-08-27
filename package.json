@@ -1,6 +1,6 @@
 {
   "name": "camdict",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "This is a simple dictionary of english from Cambridge.",
   "main": "cli.js",
   "bin": {
@@ -27,5 +27,8 @@
   },
   "bugs": {
     "url": "https://github.com/ralfting/camdict/issues"
+  },
+  "engines": {
+    "node": "12.16.1"
   }
 }
