@@ -35,7 +35,7 @@ async function handler(argv) {
     const response = await getWordMean(value);
 
     if (isWordNotFound(response)) {
-      throw "Word not found, try other one...";
+      throw `Word ${chalk.underline(value)} not found, try other one...`;
     }
 
     spinner.stop();
@@ -67,10 +67,10 @@ function getDescription($) {
 }
 
 function getHeader(value, $) {
-  const word = chalk.bgWhite.black(value);
+  const word = chalk.bgWhite.black(value.toUpperCase());
   const type = chalk.underline.gray($(".pos.dpos").first().text());
 
-  console.log(`${word.toUpperCase()} (${type})`);
+  console.log(`${word} (${type})`);
 }
 
 function getExamples($) {
