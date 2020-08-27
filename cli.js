@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const yargs = require("yargs");
 const fetch = require("node-fetch");
 const cheerio = require("cheerio");
@@ -23,22 +22,31 @@ yargs
 
 async function handler(argv) {
   const { value } = argv;
+  const spinner = ora("Searching in dictionary...").start();
 
-  if (!value) return console.warn("No word provided");
+  if (!value) {
+    spinner.stop();
+    console.warn("Word not provided");
+
+    return;
+  }
 
   try {
-    const spinner = ora("Searching in dictionary...").start();
-
     const response = await getWordMean(value);
-    const $ = cheerio.load(await response.text());
+
+    if (isWordNotFound(response)) {
+      throw "Word not found, try it again...";
+    }
 
     spinner.stop();
+    const $ = cheerio.load(await response.text());
 
-    headerWord(value, $);
+    getHeader(value, $);
     getDescription($);
     getExamples($);
   } catch (error) {
-    console.error(error);
+    spinner.stop();
+    console.error("Error: " + error);
   }
 }
 
@@ -50,13 +58,6 @@ async function getWordMean(value) {
   return response;
 }
 
-function headerWord(value, $) {
-  const word = chalk.bgWhite.black(value.toUpperCase());
-  const type = chalk.underline.gray($(".pos.dpos").first().text());
-
-  console.log(`${word} (${type})`);
-}
-
 function getDescription($) {
   const defination = $(".ddef_d").first().text().trim();
 
@@ -65,10 +66,23 @@ function getDescription($) {
   }
 }
 
+function getHeader(value, $) {
+  const word = chalk.bgWhite.black(value);
+  const type = chalk.underline.gray($(".pos.dpos").first().text());
+
+  console.log(`${word.toUpperCase()} (${type})`);
+}
+
 function getExamples($) {
   const exampleWord = chalk.bgWhite.black("\nExamples");
   const examples = $(".def-body.ddef_b").first().find(".examp");
 
   console.log(exampleWord);
   examples.each((_idx, el) => console.log("- " + $(el).text().trim()));
+}
+
+function isWordNotFound(response) {
+  return (
+    response.url === "https://dictionary.cambridge.org/dictionary/english/"
+  );
 }
