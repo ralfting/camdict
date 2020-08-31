@@ -2,6 +2,8 @@
 
 CLI of Cambridge Dictionary
 
+![Camdict demo](https://i.imgur.com/WTkqGIf.gif)
+
 ## Description
 
 A simple command line to use Cambridge Dictionary in the terminal
