@@ -35,7 +35,7 @@ async function handler(argv) {
     const response = await getWordMean(value);
 
     if (isWordNotFound(response)) {
-      throw `Word ${chalk.underline(value)} not found, try other one...`;
+      throw `Word ${chalk.underline(value)} not found, try another one...`;
     }
 
     spinner.stop();
