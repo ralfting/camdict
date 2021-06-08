@@ -17,7 +17,7 @@ A simple command line to use Cambridge Dictionary in the terminal
 ### How use it
 
 ```
-camdict <word> // Exp.: camdict house
-camdict dictionary <word> // use alias `camdict d house`
+camdict <word> // Exp.: $ camdict house
+camdict "<phrase>" // Exp.: $ camdict "wrap up"
 camdict --help
 ```
