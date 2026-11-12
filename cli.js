@@ -306,6 +306,13 @@ async function getCommonsMp3Url(sourceUrl) {
   return mp3 ? mp3.src : null;
 }
 
+// Recordings are named like "run-us.mp3" or "house-1-uk.mp3".
+function getAccent(audioUrl) {
+  const match = /-([a-z]{2})\.mp3$/.exec(audioUrl);
+
+  return match ? match[1].toUpperCase() : null;
+}
+
 async function downloadPronunciation(entries) {
   for (const { audio, sourceUrl } of getRecordings(entries)) {
     const urls = [await getCommonsMp3Url(sourceUrl).catch(() => null), audio];
@@ -316,7 +323,10 @@ async function downloadPronunciation(entries) {
       }).catch(() => null);
 
       if (response && response.ok) {
-        return Buffer.from(await response.arrayBuffer());
+        return {
+          sound: Buffer.from(await response.arrayBuffer()),
+          accent: getAccent(audio),
+        };
       }
     }
   }
@@ -333,17 +343,24 @@ const AUDIO_PLAYERS = [
 
 async function playPronunciation(entries) {
   const spinner = startSpinner("Fetching pronunciation...");
-  const sound = await downloadPronunciation(entries).finally(() =>
-    spinner.stop()
-  );
+  const recording = await downloadPronunciation(entries).catch((error) => {
+    spinner.stop();
+    throw error;
+  });
 
-  if (!sound) {
+  if (!recording) {
+    spinner.stop();
     console.warn("\nNo pronunciation audio available for this word.");
     return;
   }
 
   const file = path.join(os.tmpdir(), `camdict-${process.pid}.mp3`);
-  await fs.writeFile(file, sound);
+  await fs.writeFile(file, recording.sound);
+
+  // Keep a line on screen while the player runs; it is silent otherwise.
+  const accent = recording.accent ? ` (${recording.accent})` : "";
+  spinner.spinner = { interval: 300, frames: ["♪", "♫"] };
+  spinner.text = `Playing pronunciation${accent}...`;
 
   try {
     for (const [command, ...args] of AUDIO_PLAYERS) {
@@ -352,10 +369,12 @@ async function playPronunciation(entries) {
       }
     }
 
+    spinner.stop();
     console.warn(
       "\nNo audio player found. Install mpg123, ffmpeg (ffplay) or mpv to hear pronunciations."
     );
   } finally {
+    spinner.stop();
     await fs.rm(file, { force: true });
   }
 }
