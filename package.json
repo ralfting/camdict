@@ -1,6 +1,6 @@
 {
   "name": "camdict",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Look up English word definitions and examples from the terminal.",
   "main": "cli.js",
   "bin": {
