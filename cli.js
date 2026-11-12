@@ -134,20 +134,64 @@ function printHeader(value, phonetic) {
 function printMeaning({ partOfSpeech, definitions }, limit) {
   const shown = definitions.slice(0, Math.max(1, limit));
   const hidden = definitions.length - shown.length;
+  const numberWidth = String(shown.length).length;
 
   console.log("\n" + chalk.bold(partOfSpeech));
 
   shown.forEach(({ definition, example }, index) => {
-    console.log(`  ${index + 1}. ${definition}`);
+    const number = `${index + 1}.`.padStart(numberWidth + 1);
+    const indent = 2 + number.length + 1;
+
+    printWrapped(definition, indent, `  ${number} `);
 
     if (example) {
-      console.log(chalk.italic(`     "${example}"`));
+      printWrapped(`"${example}"`, indent, " ".repeat(indent), chalk.italic);
     }
   });
 
   if (hidden > 0) {
-    console.log(chalk.dim(`  ...and ${hidden} more (use --limit to see them)`));
+    printWrapped(
+      `...and ${hidden} more (use --limit to see them)`,
+      2,
+      "  ",
+      chalk.dim
+    );
   }
+}
+
+// Long lines are wrapped here, instead of by the terminal, so continuation
+// lines stay aligned under the text. Capped at 80 columns for readability;
+// output to a pipe or file is left unwrapped.
+const MAX_WIDTH = 80;
+
+function getOutputWidth() {
+  if (!process.stdout.isTTY) {
+    return Infinity;
+  }
+
+  return Math.min(process.stdout.columns || MAX_WIDTH, MAX_WIDTH);
+}
+
+function printWrapped(text, indent, firstPrefix, style = (line) => line) {
+  const width = Math.max(getOutputWidth() - indent, 20);
+  const lines = [];
+  let line = "";
+
+  text.split(/\s+/).forEach((word) => {
+    if (line && line.length + 1 + word.length > width) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = line ? `${line} ${word}` : word;
+    }
+  });
+  lines.push(line);
+
+  // Style each line separately so ANSI codes never span a line break.
+  lines.forEach((content, index) => {
+    const prefix = index === 0 ? firstPrefix : " ".repeat(indent);
+    console.log(prefix + style(content));
+  });
 }
 
 // Wikimedia asks API clients to identify themselves.
