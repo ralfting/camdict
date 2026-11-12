@@ -2,7 +2,7 @@
 
 English dictionary in your terminal.
 
-![Camdict demo](https://i.imgur.com/WTkqGIf.gif)
+![Camdict demo: looking up "run", playing the pronunciation of "wrap up", and listing every definition](docs/demo.gif)
 
 ## Features
 
