@@ -1,0 +1,132 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; background: #7d8f7a; }
+  #root .cap { position: absolute; left: 300px; top: 92px; width: 1320px;
+    font: 700 54px/66px Inter, sans-serif; color: #14201a; letter-spacing: -0.01em; }
+  #root .chip { font: 600 48px/66px "IBM Plex Mono", monospace; color: #f2c14e;
+    background: #1c1e1f; border-radius: 10px; padding: 0 14px; }
+  #root .win { position: absolute; left: 300px; top: 220px;
+    width: 1320px; height: 820px; border-radius: 14px; overflow: hidden;
+    background: #1c1e1f; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  #root .bar { height: 46px; background: #2b2d2e; position: relative;
+    font: 400 20px/46px Inter, sans-serif; color: #9a9893; text-align: center; }
+  #root .dots { position: absolute; left: 20px; top: 16px; display: flex; gap: 9px; }
+  #root .dots span { width: 14px; height: 14px; border-radius: 50%; }
+  #root .screen { position: absolute; left: 48px; top: 66px; width: 1224px;
+    height: 690px; overflow: hidden; }
+  #root .scroll { position: absolute; left: 0; top: 0; width: 100%; }
+  #root .row { height: 46px; font: 400 34px/46px "IBM Plex Mono", monospace;
+    color: #e8e4da; white-space: pre; }
+  #root .abs { position: absolute; left: 0; width: 100%; }
+  #root .out { opacity: 0; }
+  #root .b { font-weight: 700; }
+  #root .i { font-style: italic; }
+  #root .dim { color: rgba(232,228,218,.55); }
+  #root .inv { background: #e8e4da; color: #1c1e1f; }
+  #root .cyan { color: #6cc3c6; }
+  #root .flag { border-radius: 6px; }
+  #root .typed { display: inline-block; vertical-align: top; overflow: hidden;
+    width: calc(var(--n, 0) * 1ch); }
+  #root .caret { display: inline-block; vertical-align: top; width: 1ch; height: 40px;
+    margin-top: 3px; background: #e8e4da; }
+  #root .glyph { position: relative; display: inline-block; width: 1ch; height: 46px;
+    vertical-align: top; }
+  #root .frame { position: absolute; left: 0; top: 0; opacity: 0; }
+  #root .speaker { position: absolute; left: 1664px; width: 150px;
+    height: 150px; opacity: 0; }
+  #root .speaker .wave { opacity: 0.2; }
+</style>
+  <div id="root" data-composition-id="hear" data-width="1920" data-height="1080">
+    <div class="cap" id="hear-cap">Add <span class="chip">-a</span> to hear the pronunciation</div>
+    <div class="win" id="hear-win">
+      <div class="bar" data-layout-ignore data-layout-allow-occlusion><div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>camdict</div>
+      <div class="screen">
+      <div class="row"><span>$ </span><span class="typed" id="hear-t1">camdict wonderful <span class="flag">-a</span></span><span class="caret" id="hear-c1"></span></div>
+      <div class="row abs out" id="hear-spin" style="top:46px"><span class="glyph"><span id="hear-sp0" class="frame cyan">⠋</span><span id="hear-sp1" class="frame cyan">⠙</span><span id="hear-sp2" class="frame cyan">⠹</span><span id="hear-sp3" class="frame cyan">⠸</span><span id="hear-sp4" class="frame cyan">⠼</span><span id="hear-sp5" class="frame cyan">⠴</span><span id="hear-sp6" class="frame cyan">⠦</span><span id="hear-sp7" class="frame cyan">⠧</span><span id="hear-sp8" class="frame cyan">⠇</span><span id="hear-sp9" class="frame cyan">⠏</span></span> Searching in dictionary...</div>
+      <div class="row out hear-out"><span class="b inv"> wonderful </span> /ˈwʌn.dɚ.fl̩/</div>
+<div class="row out hear-out">&#8203;</div>
+<div class="row out hear-out"><span class="b">adjective</span></div>
+<div class="row out hear-out">  1. Tending to excite wonder; surprising, extraordinary.</div>
+<div class="row out hear-out">  2. Surprisingly excellent; very good or admirable,</div>
+<div class="row out hear-out">     extremely impressive.</div>
+<div class="row out hear-out">     <span class="i">&quot;They served a wonderful six-course meal.&quot;</span></div>
+<div class="row out hear-out">&#8203;</div>
+<div class="row out hear-out"><span class="b">adverb</span></div>
+<div class="row out hear-out">  1. Exceedingly, to a great extent.</div>
+      <div class="row abs out" id="hear-p2" style="top:506px"><span>$ </span><span class="caret" id="hear-c2"></span></div>
+      <div class="row abs out" id="hear-fetch" style="top:506px"><span class="glyph"><span id="hear-fp0" class="frame cyan">⠋</span><span id="hear-fp1" class="frame cyan">⠙</span><span id="hear-fp2" class="frame cyan">⠹</span><span id="hear-fp3" class="frame cyan">⠸</span><span id="hear-fp4" class="frame cyan">⠼</span><span id="hear-fp5" class="frame cyan">⠴</span><span id="hear-fp6" class="frame cyan">⠦</span><span id="hear-fp7" class="frame cyan">⠧</span><span id="hear-fp8" class="frame cyan">⠇</span><span id="hear-fp9" class="frame cyan">⠏</span></span> Fetching pronunciation...</div><div class="row abs out" id="hear-play" style="top:506px"><span class="glyph"><span id="hear-pl0" class="frame cyan">♪</span><span id="hear-pl1" class="frame cyan">♫</span></span> Playing pronunciation (US)...</div></div>
+    </div>
+    <svg class="speaker" id="hear-spk" style="top:740px" viewBox="0 0 150 150">
+      <path d="M18 56 H46 L82 26 V124 L46 94 H18 Z" fill="#1c1e1f"/>
+      <path id="hear-w0" class="wave" d="M98 58 Q110 75 98 92" stroke="#1c1e1f" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path id="hear-w1" class="wave" d="M112 44 Q132 75 112 106" stroke="#1c1e1f" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <path id="hear-w2" class="wave" d="M126 30 Q154 75 126 120" stroke="#1c1e1f" stroke-width="9" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const CHAR = 0.06;
+  function typeIn(sel, n, at) {
+    tl.fromTo(sel, { "--n": 0 }, { "--n": n, duration: n * CHAR, ease: "steps(" + n + ")" }, at);
+    return at + n * CHAR;
+  }
+  function blink(sel, from, to) {
+    for (let t = from, k = 0; t < to - 1e-6; t += 0.5, k++) tl.set(sel, { opacity: k % 2 ? 0 : 1 }, t);
+  }
+  function show(sel, at) { tl.set(sel, { opacity: 1 }, at); }
+  function hide(sel, at) { tl.set(sel, { opacity: 0 }, at); }
+  // Steps through overlapping glyph frames, the way ora redraws its spinner.
+  function cycle(prefix, count, from, to, step) {
+    let k = 0;
+    for (let t = from; t < to - 1e-6; t += step, k++) {
+      tl.set(prefix + (k % count), { opacity: 1 }, t);
+      tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, t);
+    }
+    tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, to);
+  }
+
+    tl.fromTo("#hear-cap", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.1);
+  blink("#hear-c1", 0, 0.7);
+  tl.set("#hear-c1", { opacity: 1 }, 0.7);
+  typeIn("#hear-t1", 20, 0.7);
+  tl.fromTo("#hear-win .flag", { color: "#e8e4da", backgroundColor: "rgba(242,193,78,0)" }, { color: "#f2c14e", backgroundColor: "rgba(242,193,78,0.18)", duration: 0.2, ease: "power2.out" }, 2.00);
+  hide("#hear-c1", 2.50);
+  show("#hear-spin", 2.50);
+  cycle("#hear-sp", 10, 2.50, 2.90, 0.08);
+  hide("#hear-spin", 2.90);
+  show(".hear-out", 2.90);
+  show("#hear-fetch", 2.90);
+  cycle("#hear-fp", 10, 2.90, 3.30, 0.08);
+  hide("#hear-fetch", 3.30);
+  show("#hear-play", 3.30);
+  cycle("#hear-pl", 2, 3.30, 5.90, 0.3);
+  hide("#hear-play", 5.90);
+  tl.fromTo("#hear-spk", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.4)" }, 3.30);
+  tl.set("#hear-w0", { opacity: 1 }, 3.45);
+  tl.set("#hear-w1", { opacity: 1 }, 3.60);
+  tl.set("#hear-w2", { opacity: 1 }, 3.75);
+  tl.set("#hear-w0, #hear-w1, #hear-w2", { opacity: 0.2 }, 3.90);
+  tl.set("#hear-w0", { opacity: 1 }, 3.90);
+  tl.set("#hear-w1", { opacity: 1 }, 4.05);
+  tl.set("#hear-w2", { opacity: 1 }, 4.20);
+  tl.set("#hear-w0, #hear-w1, #hear-w2", { opacity: 0.2 }, 4.35);
+  tl.set("#hear-w0", { opacity: 1 }, 4.35);
+  tl.set("#hear-w1", { opacity: 1 }, 4.50);
+  tl.set("#hear-w2", { opacity: 1 }, 4.65);
+  tl.set("#hear-w0, #hear-w1, #hear-w2", { opacity: 0.2 }, 4.80);
+  tl.set("#hear-w0", { opacity: 1 }, 4.80);
+  tl.set("#hear-w1", { opacity: 1 }, 4.95);
+  tl.set("#hear-w2", { opacity: 1 }, 5.10);
+  tl.set("#hear-w0, #hear-w1, #hear-w2", { opacity: 0.2 }, 5.25);
+  tl.set("#hear-w0", { opacity: 1 }, 5.25);
+  tl.set("#hear-w1", { opacity: 1 }, 5.40);
+  tl.set("#hear-w2", { opacity: 1 }, 5.55);
+  tl.set("#hear-w0, #hear-w1, #hear-w2", { opacity: 0.2 }, 5.70);
+  tl.set("#hear-w0", { opacity: 1 }, 5.70);
+  tl.set("#hear-w1", { opacity: 1 }, 5.85);
+  tl.to("#hear-spk", { opacity: 0, duration: 0.2, ease: "power2.in" }, 5.90);
+  show("#hear-p2", 5.90);
+  blink("#hear-c2", 5.90, 8.5);
+    window.__timelines["hear"] = tl;
+  </script>
+</template>

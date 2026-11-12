@@ -1,0 +1,108 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; background: #7d8f7a; }
+  #root .cap { position: absolute; left: 300px; top: 92px; width: 1320px;
+    font: 700 54px/66px Inter, sans-serif; color: #14201a; letter-spacing: -0.01em; }
+  #root .chip { font: 600 48px/66px "IBM Plex Mono", monospace; color: #f2c14e;
+    background: #1c1e1f; border-radius: 10px; padding: 0 14px; }
+  #root .win { position: absolute; left: 300px; top: 220px;
+    width: 1320px; height: 820px; border-radius: 14px; overflow: hidden;
+    background: #1c1e1f; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  #root .bar { height: 46px; background: #2b2d2e; position: relative;
+    font: 400 20px/46px Inter, sans-serif; color: #9a9893; text-align: center; }
+  #root .dots { position: absolute; left: 20px; top: 16px; display: flex; gap: 9px; }
+  #root .dots span { width: 14px; height: 14px; border-radius: 50%; }
+  #root .screen { position: absolute; left: 48px; top: 66px; width: 1224px;
+    height: 690px; overflow: hidden; }
+  #root .scroll { position: absolute; left: 0; top: 0; width: 100%; }
+  #root .row { height: 46px; font: 400 34px/46px "IBM Plex Mono", monospace;
+    color: #e8e4da; white-space: pre; }
+  #root .abs { position: absolute; left: 0; width: 100%; }
+  #root .out { opacity: 0; }
+  #root .b { font-weight: 700; }
+  #root .i { font-style: italic; }
+  #root .dim { color: rgba(232,228,218,.55); }
+  #root .inv { background: #e8e4da; color: #1c1e1f; }
+  #root .cyan { color: #6cc3c6; }
+  #root .flag { border-radius: 6px; }
+  #root .typed { display: inline-block; vertical-align: top; overflow: hidden;
+    width: calc(var(--n, 0) * 1ch); }
+  #root .caret { display: inline-block; vertical-align: top; width: 1ch; height: 40px;
+    margin-top: 3px; background: #e8e4da; }
+  #root .glyph { position: relative; display: inline-block; width: 1ch; height: 46px;
+    vertical-align: top; }
+  #root .frame { position: absolute; left: 0; top: 0; opacity: 0; }
+  #root .speaker { position: absolute; left: 1664px; width: 150px;
+    height: 150px; opacity: 0; }
+  #root .speaker .wave { opacity: 0.2; }
+</style>
+  <div id="root" data-composition-id="every" data-width="1920" data-height="1080">
+    <div class="cap" id="every-cap">Show every definition with <span class="chip">--all</span></div>
+    <div class="win" id="every-win">
+      <div class="bar" data-layout-ignore data-layout-allow-occlusion><div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>camdict</div>
+      <div class="screen"><div class="scroll" id="every-scroll" data-layout-allow-overflow>
+      <div class="row"><span>$ </span><span class="typed" id="every-t1">camdict library <span class="flag">--all</span></span><span class="caret" id="every-c1"></span></div>
+      <div class="row abs out" id="every-spin" style="top:46px"><span class="glyph"><span id="every-sp0" class="frame cyan">⠋</span><span id="every-sp1" class="frame cyan">⠙</span><span id="every-sp2" class="frame cyan">⠹</span><span id="every-sp3" class="frame cyan">⠸</span><span id="every-sp4" class="frame cyan">⠼</span><span id="every-sp5" class="frame cyan">⠴</span><span id="every-sp6" class="frame cyan">⠦</span><span id="every-sp7" class="frame cyan">⠧</span><span id="every-sp8" class="frame cyan">⠇</span><span id="every-sp9" class="frame cyan">⠏</span></span> Searching in dictionary...</div>
+      <div class="row out every-out"><span class="b inv"> library </span> /ˈlaɪbɹəɹi/</div>
+<div class="row out every-out">&#8203;</div>
+<div class="row out every-out"><span class="b">noun</span></div>
+<div class="row out every-out">  1. An institution which holds books and/or other forms of</div>
+<div class="row out every-out">     media for use by the public or qualified people often</div>
+<div class="row out every-out">     lending them out, as well as providing various other</div>
+<div class="row out every-out">     services for its users.</div>
+<div class="row out every-out">  2. (by extension) Any institution that lends out its goods</div>
+<div class="row out every-out">     for use by the public or a community.</div>
+<div class="row out every-out">  3. A collection of books or other forms of stored</div>
+<div class="row out every-out">     information.</div>
+<div class="row out every-out">  4. An equivalent collection of analogous information in a</div>
+<div class="row out every-out">     non-printed form, e.g. record library.</div>
+<div class="row out every-out">  5. A room dedicated to storing books.</div>
+<div class="row out every-out">  6. A collection of software routines that provide</div>
+<div class="row out every-out">     functionality to be incorporated into or used by a</div>
+<div class="row out every-out">     computer program.</div>
+<div class="row out every-out">  7. A collection of DNA material from a single organism or</div>
+<div class="row out every-out">     relative to a single disease.</div>
+<div class="row out every-out">  8. The deck or draw pile.</div>
+      <div class="row out every-out" id="every-p2" ><span>$ </span><span class="caret" id="every-c2"></span></div>
+      </div></div>
+    </div>
+    
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const CHAR = 0.06;
+  function typeIn(sel, n, at) {
+    tl.fromTo(sel, { "--n": 0 }, { "--n": n, duration: n * CHAR, ease: "steps(" + n + ")" }, at);
+    return at + n * CHAR;
+  }
+  function blink(sel, from, to) {
+    for (let t = from, k = 0; t < to - 1e-6; t += 0.5, k++) tl.set(sel, { opacity: k % 2 ? 0 : 1 }, t);
+  }
+  function show(sel, at) { tl.set(sel, { opacity: 1 }, at); }
+  function hide(sel, at) { tl.set(sel, { opacity: 0 }, at); }
+  // Steps through overlapping glyph frames, the way ora redraws its spinner.
+  function cycle(prefix, count, from, to, step) {
+    let k = 0;
+    for (let t = from; t < to - 1e-6; t += step, k++) {
+      tl.set(prefix + (k % count), { opacity: 1 }, t);
+      tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, t);
+    }
+    tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, to);
+  }
+
+    tl.fromTo("#every-cap", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.1);
+  blink("#every-c1", 0, 0.7);
+  tl.set("#every-c1", { opacity: 1 }, 0.7);
+  typeIn("#every-t1", 21, 0.7);
+  tl.fromTo("#every-win .flag", { color: "#e8e4da", backgroundColor: "rgba(242,193,78,0)" }, { color: "#f2c14e", backgroundColor: "rgba(242,193,78,0.18)", duration: 0.2, ease: "power2.out" }, 2.06);
+  hide("#every-c1", 2.56);
+  show("#every-spin", 2.56);
+  cycle("#every-sp", 10, 2.56, 2.96, 0.08);
+  hide("#every-spin", 2.96);
+  show(".every-out", 2.96);
+  tl.fromTo("#every-scroll", { y: 0 }, { y: -322, duration: 1.6, ease: "steps(7)" }, 3.36);
+  show("#every-p2", 4.96);
+  blink("#every-c2", 4.96, 7.56);
+    window.__timelines["every"] = tl;
+  </script>
+</template>

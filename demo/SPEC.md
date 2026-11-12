@@ -1,30 +1,33 @@
-GOAL:    a README visitor sees, in one loop, that camdict prints every meaning
-         readably, plays the pronunciation, and can show everything, then
-         knows the install command.
-OUTPUT:  HyperFrames, 1920 x 1080, 30 fps; delivered as MP4 and as a
-         960 px wide GIF for the GitHub README (GIFs carry no sound).
-TIME:    17 s x 30 = 510 frames. Silent on purpose: the README embeds a GIF.
-LOOK:    ground #7d8f7a flat sage, no texture. A macOS-style terminal window
-         1540 x 1014 px, radius 14 px, shadow 0 24 px 60 px rgba(0,0,0,.35).
-         Terminal bg #1c1e1f, ink #e8e4da, dim = ink at 55%, spinner cyan
-         #6cc3c6 (the only accent, as in the real CLI). Title bar #2b2d2e,
-         46 px, traffic-light dots, title "camdict" Inter 400 20 px #9a9893.
-         Body IBM Plex Mono 30 px, line height 42 px, 80 columns x 22 rows.
-OBJECTS: the terminal window and the CLI's real output, captured from
-         `node cli.js` in an 80-column pty (styles from its ANSI codes).
-MOTION:  typing in hard steps at 55 ms a character, caret solid while typing
-         and blinking at 0.5 s when idle. Output appears at once, as a real
-         terminal prints it. The --all output scrolls in line steps over 0.8 s.
-         No eased moves anywhere: a terminal does not ease.
-SHOTS:   lookup 0-5.8 s: type `camdict run -n 2`, spinner 0.5 s, the page of
-           meanings; read hold 3.8 s.
-         audio 5.8-10.8 s: type `camdict "wrap up" -a`, output, "Fetching",
-           then "Playing pronunciation (AU)" with the note glyph alternating
-           every 0.3 s for 2 s, line clears to a prompt.
-         all 10.8-17 s: type `camdict run --all`, 120 lines scroll past, then
-           type `npm i -g camdict` and hold 2.2 s on it.
-BANNED:  dark void ground; glow; gradients; eased or sliding text; fake
-         output that the CLI does not print; captions or titles over the
-         terminal.
-QA:      t=5.0 (whole run page readable), t=9.5 (playing line), t=12.6
-         (scroll finished, prompt at bottom), t=16.8 (install command typed).
+GOAL:    a README visitor learns one camdict command per video, fast enough to
+         copy it: basics (a word, then a phrase), audio (-a) and options
+         (-n, --all).
+OUTPUT:  three HyperFrames projects (basics/, audio/, options/), 1920 x 1080,
+         30 fps; delivered as 960 px GIFs in docs/ (GIFs carry no sound).
+TIME:    basics 12.6 s, audio 8.5 s, options 14.1 s. Silent on purpose.
+LOOK:    ground #7d8f7a flat sage. Caption Inter 700 54 px #14201a, left-aligned
+         with the terminal at x 300, top 92 px; flags in the caption are chips
+         (IBM Plex Mono 600 48 px, #f2c14e on #1c1e1f). Terminal window
+         1320 x 820 at (300, 220), radius 14, shadow 0 24 60 rgba(0,0,0,.35);
+         IBM Plex Mono 34 px, line height 46 px, 60 columns x 15 rows,
+         bg #1c1e1f, ink #e8e4da, dim ink at 55%, spinner cyan #6cc3c6.
+         Accent #f2c14e appears only on the flag being taught: its caption
+         chip and the same characters in the typed command.
+OBJECTS: the terminal and camdict's real output, captured from `node cli.js`
+         in a 60-column pty; a speaker drawn with three sound waves.
+MOTION:  caption blurs in (8 px to 0, 0.2 s, power4.out). Typing in hard steps
+         at 60 ms a character; the flag lights up 0.1 s after typing ends and
+         Enter comes 0.5 s later. Output appears at once, as a terminal prints
+         it. The speaker pops in with back.out(1.4) and its waves light in
+         sequence every 0.15 s while the "Playing" line shows.
+SHOTS:   basics: "Look up any English word" / camdict pizza; "Put phrases in
+           quotes" / camdict "give up", quotes highlighted.
+         audio: "Add -a to hear the pronunciation" / camdict wonderful -a,
+           Fetching, then Playing (US) for 2.6 s beside the speaker.
+         options: "Show fewer definitions with -n" / camdict library -n 1;
+           "Show every definition with --all" / camdict library --all scrolls
+           to its last definition.
+BANNED:  dark void ground; glow; gradients; eased or sliding terminal text;
+         output the CLI does not print; words whose definitions are
+         offensive (tea, apple, banana and cookie were rejected for this).
+QA:      every step's output frame readable at 960 px; the speaker visible
+         while audio plays; the last frame of each video is a finished screen.

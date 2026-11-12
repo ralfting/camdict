@@ -1,0 +1,96 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; background: #7d8f7a; }
+  #root .cap { position: absolute; left: 300px; top: 92px; width: 1320px;
+    font: 700 54px/66px Inter, sans-serif; color: #14201a; letter-spacing: -0.01em; }
+  #root .chip { font: 600 48px/66px "IBM Plex Mono", monospace; color: #f2c14e;
+    background: #1c1e1f; border-radius: 10px; padding: 0 14px; }
+  #root .win { position: absolute; left: 300px; top: 220px;
+    width: 1320px; height: 820px; border-radius: 14px; overflow: hidden;
+    background: #1c1e1f; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  #root .bar { height: 46px; background: #2b2d2e; position: relative;
+    font: 400 20px/46px Inter, sans-serif; color: #9a9893; text-align: center; }
+  #root .dots { position: absolute; left: 20px; top: 16px; display: flex; gap: 9px; }
+  #root .dots span { width: 14px; height: 14px; border-radius: 50%; }
+  #root .screen { position: absolute; left: 48px; top: 66px; width: 1224px;
+    height: 690px; overflow: hidden; }
+  #root .scroll { position: absolute; left: 0; top: 0; width: 100%; }
+  #root .row { height: 46px; font: 400 34px/46px "IBM Plex Mono", monospace;
+    color: #e8e4da; white-space: pre; }
+  #root .abs { position: absolute; left: 0; width: 100%; }
+  #root .out { opacity: 0; }
+  #root .b { font-weight: 700; }
+  #root .i { font-style: italic; }
+  #root .dim { color: rgba(232,228,218,.55); }
+  #root .inv { background: #e8e4da; color: #1c1e1f; }
+  #root .cyan { color: #6cc3c6; }
+  #root .flag { border-radius: 6px; }
+  #root .typed { display: inline-block; vertical-align: top; overflow: hidden;
+    width: calc(var(--n, 0) * 1ch); }
+  #root .caret { display: inline-block; vertical-align: top; width: 1ch; height: 40px;
+    margin-top: 3px; background: #e8e4da; }
+  #root .glyph { position: relative; display: inline-block; width: 1ch; height: 46px;
+    vertical-align: top; }
+  #root .frame { position: absolute; left: 0; top: 0; opacity: 0; }
+  #root .speaker { position: absolute; left: 1664px; width: 150px;
+    height: 150px; opacity: 0; }
+  #root .speaker .wave { opacity: 0.2; }
+</style>
+  <div id="root" data-composition-id="look" data-width="1920" data-height="1080">
+    <div class="cap" id="look-cap">Look up any English word</div>
+    <div class="win" id="look-win">
+      <div class="bar" data-layout-ignore data-layout-allow-occlusion><div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>camdict</div>
+      <div class="screen">
+      <div class="row"><span>$ </span><span class="typed" id="look-t1">camdict pizza</span><span class="caret" id="look-c1"></span></div>
+      <div class="row abs out" id="look-spin" style="top:46px"><span class="glyph"><span id="look-sp0" class="frame cyan">⠋</span><span id="look-sp1" class="frame cyan">⠙</span><span id="look-sp2" class="frame cyan">⠹</span><span id="look-sp3" class="frame cyan">⠸</span><span id="look-sp4" class="frame cyan">⠼</span><span id="look-sp5" class="frame cyan">⠴</span><span id="look-sp6" class="frame cyan">⠦</span><span id="look-sp7" class="frame cyan">⠧</span><span id="look-sp8" class="frame cyan">⠇</span><span id="look-sp9" class="frame cyan">⠏</span></span> Searching in dictionary...</div>
+      <div class="row out look-out"><span class="b inv"> pizza </span> /ˈpiːt.sə/</div>
+<div class="row out look-out">&#8203;</div>
+<div class="row out look-out"><span class="b">noun</span></div>
+<div class="row out look-out">  1. A baked Italian dish of a thinly rolled bread dough</div>
+<div class="row out look-out">     crust typically topped before baking with tomato sauce,</div>
+<div class="row out look-out">     cheese and other ingredients such as meat, vegetables</div>
+<div class="row out look-out">     or fruit</div>
+<div class="row out look-out">     <span class="i">&quot;Want to go out for pizza tonight?&quot;</span></div>
+<div class="row out look-out">  2. A single instance of this dish</div>
+<div class="row out look-out">     <span class="i">&quot;He ate a whole pizza!&quot;</span></div>
+      <div class="row out look-out" id="look-p2" ><span>$ </span><span class="caret" id="look-c2"></span></div>
+      </div>
+    </div>
+    
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const CHAR = 0.06;
+  function typeIn(sel, n, at) {
+    tl.fromTo(sel, { "--n": 0 }, { "--n": n, duration: n * CHAR, ease: "steps(" + n + ")" }, at);
+    return at + n * CHAR;
+  }
+  function blink(sel, from, to) {
+    for (let t = from, k = 0; t < to - 1e-6; t += 0.5, k++) tl.set(sel, { opacity: k % 2 ? 0 : 1 }, t);
+  }
+  function show(sel, at) { tl.set(sel, { opacity: 1 }, at); }
+  function hide(sel, at) { tl.set(sel, { opacity: 0 }, at); }
+  // Steps through overlapping glyph frames, the way ora redraws its spinner.
+  function cycle(prefix, count, from, to, step) {
+    let k = 0;
+    for (let t = from; t < to - 1e-6; t += step, k++) {
+      tl.set(prefix + (k % count), { opacity: 1 }, t);
+      tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, t);
+    }
+    tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, to);
+  }
+
+    tl.fromTo("#look-cap", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.1);
+  blink("#look-c1", 0, 0.7);
+  tl.set("#look-c1", { opacity: 1 }, 0.7);
+  typeIn("#look-t1", 13, 0.7);
+  hide("#look-c1", 2.08);
+  show("#look-spin", 2.08);
+  cycle("#look-sp", 10, 2.08, 2.48, 0.08);
+  hide("#look-spin", 2.48);
+  show(".look-out", 2.48);
+  show("#look-p2", 2.48);
+  blink("#look-c2", 2.48, 6.08);
+    window.__timelines["look"] = tl;
+  </script>
+</template>
