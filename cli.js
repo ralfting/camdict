@@ -6,6 +6,7 @@ const { spawn } = require("child_process");
 const fs = require("fs/promises");
 const os = require("os");
 const path = require("path");
+const { getSuggestions } = require("./suggestions");
 
 // chalk 4 ignores the NO_COLOR convention (https://no-color.org), so apply
 // it here. FORCE_COLOR still wins, matching Node's own behavior.
@@ -62,7 +63,7 @@ async function handler(argv) {
 
   try {
     const entries = await getWordEntries(value);
-    const suggestions = entries ? [] : await getSuggestions(value);
+    const suggestions = entries ? [] : await getSuggestions(value, USER_AGENT);
     spinner.stop();
 
     if (!entries) {
@@ -100,47 +101,6 @@ function printError(message) {
   process.exitCode = 1;
 }
 
-// Datamuse marks common misspellings with a "Misspelling of X." definition,
-// and that is the only way to reach X when it is not among the close
-// spellings it returns (recieve -> receive). Words rarer than once per
-// million are dropped as too obscure to be what the user meant, and the rest
-// go most common first, so "pizzza" offers pizza before piazza. Resolves
-// empty on any failure, since the lookup has already failed and only the
-// hint is lost.
-async function getSuggestions(value) {
-  try {
-    const response = await fetch(
-      `https://api.datamuse.com/words?sp=${encodeURIComponent(value)}&md=df&max=10`,
-      {
-        headers: { "User-Agent": USER_AGENT },
-        // Short, so a typo never feels slower than a hit.
-        signal: AbortSignal.timeout(3000),
-      }
-    );
-    const rows = await response.json();
-    const frequency = ({ tags = [] }) =>
-      Number((tags.find((tag) => tag.startsWith("f:")) || "f:0").slice(2));
-    const corrections = rows.flatMap(({ defs = [] }) =>
-      defs
-        .map((def) => /(?:Misspelling|spelling) of ([^.\[]+?)\./.exec(def))
-        .filter(Boolean)
-        .map((match) => match[1])
-    );
-    const common = rows
-      .filter((row) => frequency(row) >= 1)
-      .sort((a, b) => frequency(b) - frequency(a))
-      .map(({ word }) => word);
-    const input = value.toLowerCase();
-
-    return [...new Set([...corrections, ...common])]
-      .filter((word) => word.toLowerCase() !== input)
-      .slice(0, 3);
-  } catch {
-    return [];
-  }
-}
-
-// Printed with the error on stderr, so stdout stays empty for pipes.
 function printSuggestions(words) {
   if (!words.length) {
     return;
