@@ -17,7 +17,8 @@ camdict pizza
 camdict "give up"
 ```
 
-Put phrases in quotes.
+Put phrases in quotes. If a word is misspelled, camdict suggests the
+closest matches.
 
 ## Hear the pronunciation
 
@@ -57,5 +58,6 @@ service is unreachable.
 
 ## Data sources
 
-Definitions come from the [Free Dictionary API](https://dictionaryapi.dev/)
-and pronunciations from [Wikimedia Commons](https://commons.wikimedia.org/).
+Definitions come from the [Free Dictionary API](https://dictionaryapi.dev/),
+pronunciations from [Wikimedia Commons](https://commons.wikimedia.org/) and
+spelling suggestions from [Datamuse](https://www.datamuse.com/api/).
