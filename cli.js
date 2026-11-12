@@ -10,7 +10,7 @@ const {
   printHiddenSummary,
 } = require("./lib/output");
 const { playPronunciation } = require("./lib/pronunciation");
-const { getSuggestions } = require("./suggestions");
+const { getSuggestions } = require("./lib/suggestions");
 
 yargs
   .command({
