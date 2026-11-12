@@ -7,6 +7,9 @@ const fs = require("fs/promises");
 const os = require("os");
 const path = require("path");
 
+// Declared before yargs runs: the handler starts synchronously while parsing.
+const REQUEST_TIMEOUT_MS = 10000;
+
 yargs
   .command({
     command: "$0 [value]",
@@ -42,23 +45,21 @@ yargs
 async function handler(argv) {
   const { value, audio, all } = argv;
   const limit = all ? Infinity : Math.max(1, argv.limit);
-  const spinner = ora("Searching in dictionary...").start();
 
   if (!value) {
-    spinner.stop();
-    console.warn("Word not provided");
-
+    printError("Provide a word or phrase to look up.\n");
+    yargs.showHelp();
     return;
   }
+
+  const spinner = ora("Searching in dictionary...").start();
 
   try {
     const entries = await getWordEntries(value);
     spinner.stop();
 
     if (!entries) {
-      console.error(
-        `Error: Word ${chalk.underline(value)} not found, try another one...`
-      );
+      printError(`No definitions found for "${value}".`);
       return;
     }
 
@@ -75,21 +76,42 @@ async function handler(argv) {
     }
   } catch (error) {
     spinner.stop();
-    console.error("Error: " + error.message);
+    printError(error.message);
   }
 }
 
+// Only the label is colored; the message keeps the theme's text color so
+// it stays readable on any background.
+function printError(message) {
+  console.error(`${chalk.red.bold("Error:")} ${message}`);
+  process.exitCode = 1;
+}
+
+
 async function getWordEntries(value) {
-  const response = await fetch(
-    `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(value)}`
-  );
+  const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(value)}`;
+  const signal = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
+  let response;
+
+  try {
+    response = await fetch(url, { signal });
+  } catch (error) {
+    // fetch only says "fetch failed"; translate it into something actionable.
+    throw new Error(
+      error.name === "TimeoutError"
+        ? "The dictionary service took too long to respond. Try again in a moment."
+        : "Could not reach the dictionary service. Check your connection and try again."
+    );
+  }
 
   if (response.status === 404) {
     return null;
   }
 
   if (!response.ok) {
-    throw new Error(`Dictionary service unavailable (HTTP ${response.status})`);
+    throw new Error(
+      `The dictionary service is unavailable right now (HTTP ${response.status}). Try again later.`
+    );
   }
 
   const entries = await response.json();
