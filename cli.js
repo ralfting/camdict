@@ -62,10 +62,12 @@ async function handler(argv) {
 
   try {
     const entries = await getWordEntries(value);
+    const suggestions = entries ? [] : await getSuggestions(value);
     spinner.stop();
 
     if (!entries) {
       printError(`No definitions found for "${value}".`);
+      printSuggestions(suggestions);
       return;
     }
 
@@ -98,6 +100,53 @@ function printError(message) {
   process.exitCode = 1;
 }
 
+// Datamuse marks common misspellings with a "Misspelling of X." definition,
+// and that is the only way to reach X when it is not among the close
+// spellings it returns (recieve -> receive). Words rarer than once per
+// million are dropped as too obscure to be what the user meant. Resolves
+// empty on any failure, since the lookup has already failed and only the
+// hint is lost.
+async function getSuggestions(value) {
+  try {
+    const response = await fetch(
+      `https://api.datamuse.com/words?sp=${encodeURIComponent(value)}&md=df&max=10`,
+      {
+        headers: { "User-Agent": USER_AGENT },
+        // Short, so a typo never feels slower than a hit.
+        signal: AbortSignal.timeout(3000),
+      }
+    );
+    const rows = await response.json();
+    const frequency = ({ tags = [] }) =>
+      Number((tags.find((tag) => tag.startsWith("f:")) || "f:0").slice(2));
+    const corrections = rows.flatMap(({ defs = [] }) =>
+      defs
+        .map((def) => /(?:Misspelling|spelling) of ([^.\[]+?)\./.exec(def))
+        .filter(Boolean)
+        .map((match) => match[1])
+    );
+    const common = rows
+      .filter((row) => frequency(row) >= 1)
+      .map(({ word }) => word);
+    const input = value.toLowerCase();
+
+    return [...new Set([...corrections, ...common])]
+      .filter((word) => word.toLowerCase() !== input)
+      .slice(0, 3);
+  } catch {
+    return [];
+  }
+}
+
+// Printed with the error on stderr, so stdout stays empty for pipes.
+function printSuggestions(words) {
+  if (!words.length) {
+    return;
+  }
+
+  console.error(chalk.dim("Did you mean: ") + words.join(" · "));
+  console.error(chalk.dim("Try: ") + `camdict ${quoteArg(words[0])}`);
+}
 
 async function getWordEntries(value) {
   const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(value)}`;
@@ -210,11 +259,14 @@ function printHiddenSummary(value, meanings, limit) {
       `${limit} of ${definitions.length} ${partOfSpeech}`
     )
     .join(" · ");
-  const word = /^[\w-]+$/.test(value) ? value : `"${value}"`;
 
   console.log();
   printWrapped(`Showing ${counts} definitions.`, 0, "", chalk.dim);
-  console.log(chalk.dim("See all: ") + `camdict ${word} --all`);
+  console.log(chalk.dim("See all: ") + `camdict ${quoteArg(value)} --all`);
+}
+
+function quoteArg(value) {
+  return /^[\w-]+$/.test(value) ? value : `"${value}"`;
 }
 
 // Long lines are wrapped here, instead of by the terminal, so continuation
