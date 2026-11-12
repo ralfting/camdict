@@ -4,7 +4,7 @@
   "description": "Look up English word definitions and examples from the terminal.",
   "main": "cli.js",
   "bin": {
-    "camdict": "./cli.js"
+    "camdict": "cli.js"
   },
   "dependencies": {
     "chalk": "^4.1.0",
@@ -23,12 +23,15 @@
   "homepage": "https://github.com/ralfting/camdict/blob/master/README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com:ralfting/camdict.git"
+    "url": "git+https://github.com/ralfting/camdict.git"
   },
   "bugs": {
     "url": "https://github.com/ralfting/camdict/issues"
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "files": [
+    "cli.js"
+  ]
 }
