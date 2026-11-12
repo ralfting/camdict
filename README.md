@@ -6,15 +6,16 @@ English dictionary in your terminal.
 
 ## Features
 
-- **Every meaning, grouped by part of speech**, numbered, with a usage example
-  under each definition.
-- **Phonetic transcription** next to the word.
-- **Pronunciation out loud** with `--audio`, preferring the US recording.
-- **Readable on any terminal theme**: styled with bold, italic and dim instead
-  of fixed colors, long definitions wrap aligned under their text, and
-  `NO_COLOR` is honored.
-- **Script friendly**: errors go to stderr with exit code 1, and piped output
-  is never wrapped.
+- Every meaning of the word, grouped by part of speech and numbered, with a
+  usage example under each definition.
+- The phonetic transcription next to the word.
+- `--audio` plays the pronunciation. It picks the US recording when there is
+  one.
+- Text that stays legible on light and dark themes. Camdict styles it with
+  bold, italic and dim instead of fixed colors, aligns wrapped lines under
+  their definition, and honors `NO_COLOR`.
+- Errors go to stderr with exit code 1, and camdict never wraps piped output,
+  so it works in scripts.
 
 ```
 $ camdict run -n 2
@@ -48,8 +49,8 @@ Requires Node.js 22 or newer.
 npm i -g camdict
 ```
 
-To hear pronunciations, macOS works out of the box (`afplay`). On Linux or
-Windows, install one of `mpg123`, `ffmpeg` (for `ffplay`) or `mpv`.
+On macOS, `--audio` plays sound with the built-in `afplay`. On Linux or
+Windows, install `mpg123`, `ffmpeg` or `mpv` first.
 
 ## Usage
 
@@ -69,18 +70,18 @@ camdict --help
 | `--all` | | `false` | Show every definition (overrides `--limit`) |
 | `--no-color` | | | Disable colors and styles (same as `NO_COLOR=1`) |
 
-When definitions are cut by `--limit`, a summary at the end says how many were
-hidden and gives the command to see them all.
+When `--limit` cuts definitions, the last lines say how many it hid and print
+the command that shows them all.
 
 ### Exit codes
 
 | Code | Meaning |
 |---|---|
 | `0` | The word was found |
-| `1` | The word was not found, no word was given, or the dictionary service could not be reached |
+| `1` | The dictionary has no such word, no word was given, or camdict could not reach the dictionary service |
 
-A word with no recording still exits `0` with `--audio`; the CLI prints a
-warning and shows the definitions.
+With `--audio`, a word that has no recording still exits with `0`. Camdict
+shows the definitions and prints a warning.
 
 ## Data sources
 
