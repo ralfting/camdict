@@ -1,18 +1,23 @@
 # Camdict
 
-CLI of Cambridge Dictionary
+English dictionary in your terminal
 
 ![Camdict demo](https://i.imgur.com/WTkqGIf.gif)
 
 ## Description
 
-A simple command line to look up English words in the terminal.
+A simple command line to look up English words in the terminal. It shows the
+part of speech, the definition and usage examples.
 
 > Definitions come from the [Free Dictionary API](https://dictionaryapi.dev/).
-> Cambridge Dictionary now blocks automated requests with a Cloudflare challenge,
-> so it can no longer be scraped.
+> Camdict used to scrape Cambridge Dictionary, which now blocks automated
+> requests with a Cloudflare challenge.
 
 ## Getting Started
+
+### Requirements
+
+- Node.js 22 or newer
 
 ### Installing
 
