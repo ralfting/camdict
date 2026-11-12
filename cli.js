@@ -124,27 +124,29 @@ function getPhonetic(entries) {
 }
 
 function printHeader(value, phonetic) {
-  const word = chalk.bgWhite.black(` ${value.toUpperCase()} `);
+  // inverse swaps the theme's own foreground and background, so the badge has
+  // the same contrast as body text in any theme, unlike a fixed bgWhite.
+  const word = chalk.inverse.bold(` ${value.toUpperCase()} `);
 
-  console.log(phonetic ? `${word} ${chalk.cyan(phonetic)}` : word);
+  console.log(phonetic ? `${word} ${phonetic}` : word);
 }
 
 function printMeaning({ partOfSpeech, definitions }, limit) {
   const shown = definitions.slice(0, Math.max(1, limit));
   const hidden = definitions.length - shown.length;
 
-  console.log("\n" + chalk.underline.gray(partOfSpeech));
+  console.log("\n" + chalk.bold(partOfSpeech));
 
   shown.forEach(({ definition, example }, index) => {
     console.log(`  ${index + 1}. ${definition}`);
 
     if (example) {
-      console.log(chalk.italic.gray(`     "${example}"`));
+      console.log(chalk.italic(`     "${example}"`));
     }
   });
 
   if (hidden > 0) {
-    console.log(chalk.gray(`  ...and ${hidden} more (use --limit to see them)`));
+    console.log(chalk.dim(`  ...and ${hidden} more (use --limit to see them)`));
   }
 }
 
@@ -234,7 +236,7 @@ async function playPronunciation(entries) {
   );
 
   if (!sound) {
-    console.warn(chalk.yellow("\nNo pronunciation audio available for this word."));
+    console.warn("\nNo pronunciation audio available for this word.");
     return;
   }
 
@@ -249,9 +251,7 @@ async function playPronunciation(entries) {
     }
 
     console.warn(
-      chalk.yellow(
-        "\nNo audio player found. Install mpg123, ffmpeg (ffplay) or mpv to hear pronunciations."
-      )
+      "\nNo audio player found. Install mpg123, ffmpeg (ffplay) or mpv to hear pronunciations."
     );
   } finally {
     await fs.rm(file, { force: true });
