@@ -2,7 +2,10 @@
 
 English dictionary in your terminal.
 
-![Looking up "pizza", then the phrase "give up", in camdict](docs/demo-basics.gif)
+```
+npm i -g camdict
+camdict pizza
+```
 
 ## Features
 
@@ -32,12 +35,15 @@ Windows, install `mpg123`, `ffmpeg` or `mpv` first.
 
 ### Look up a word or phrase
 
+![Looking up "pizza", then the phrase "give up", in camdict](docs/demo-basics.gif)
+
+Type `camdict` and the word. For a phrase, put it in quotes so your shell
+passes it as one argument.
+
 ```
 camdict pizza
 camdict "give up"
 ```
-
-Put a phrase in quotes so your shell passes it as one argument.
 
 ### Hear the pronunciation
 
