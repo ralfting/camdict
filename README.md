@@ -10,7 +10,7 @@ Requires Node.js 22 or newer.
 
 ## Look up a word
 
-![Looking up "pizza", then the phrase "give up", in camdict](docs/demo-basics.gif)
+![Looking up the word pizza, then the phrase give up, in camdict](docs/demo-basics.gif)
 
 ```
 camdict pizza
