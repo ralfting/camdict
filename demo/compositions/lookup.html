@@ -1,0 +1,94 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; background: #7d8f7a; }
+  #root .win { position: absolute; left: 190px; top: 33px; width: 1540px; height: 1014px;
+    border-radius: 14px; overflow: hidden; background: #1c1e1f;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  #root .bar { height: 46px; background: #2b2d2e; position: relative;
+    font: 400 20px/46px Inter, sans-serif; color: #9a9893; text-align: center; }
+  #root .dots { position: absolute; left: 20px; top: 16px; display: flex; gap: 9px; }
+  #root .dots span { width: 14px; height: 14px; border-radius: 50%; }
+  #root .screen { position: absolute; left: 50px; top: 68px; width: 1440px; height: 924px; overflow: hidden; }
+  #root .scroll { position: absolute; left: 0; top: 0; width: 100%; }
+  #root .row { height: 42px; font: 400 30px/42px "IBM Plex Mono", monospace; color: #e8e4da;
+    white-space: pre; }
+  #root .abs { position: absolute; left: 0; width: 100%; }
+  #root .out { opacity: 0; }
+  #root .b { font-weight: 700; }
+  #root .i { font-style: italic; }
+  #root .dim { color: rgba(232,228,218,.55); }
+  #root .inv { background: #e8e4da; color: #1c1e1f; }
+  #root .cyan { color: #6cc3c6; }
+  #root .typed { display: inline-block; vertical-align: top; overflow: hidden;
+    width: calc(var(--n, 0) * 1ch); }
+  #root .caret { display: inline-block; vertical-align: top; width: 1ch; height: 36px;
+    margin-top: 3px; background: #e8e4da; }
+  #root .frame { position: absolute; left: 0; top: 0; opacity: 0; }
+  #root .glyph { position: relative; display: inline-block; width: 1ch; height: 42px; vertical-align: top; }
+</style>
+  <div id="root" data-composition-id="lookup" data-width="1920" data-height="1080">
+    <div class="win">
+      <div class="bar" data-layout-ignore data-layout-allow-occlusion><div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>camdict</div>
+      <div class="screen">
+  <div class="row" id="l-p1"><span>$ </span><span class="typed" id="l-p1-t">camdict run -n 2</span><span class="caret" id="l-p1-c"></span></div>
+  <div class="row abs out" id="l-spin" style="top:42px"><span class="glyph"><span id="l-sp0" class="frame cyan">⠋</span><span id="l-sp1" class="frame cyan">⠙</span><span id="l-sp2" class="frame cyan">⠹</span><span id="l-sp3" class="frame cyan">⠸</span><span id="l-sp4" class="frame cyan">⠼</span><span id="l-sp5" class="frame cyan">⠴</span><span id="l-sp6" class="frame cyan">⠦</span><span id="l-sp7" class="frame cyan">⠧</span><span id="l-sp8" class="frame cyan">⠇</span><span id="l-sp9" class="frame cyan">⠏</span></span> Searching in dictionary...</div>
+  <div class="row out l-out"><span class="b inv"> run </span> /ɹʌn/</div>
+<div class="row out l-out">&#8203;</div>
+<div class="row out l-out"><span class="b">verb</span></div>
+<div class="row out l-out">  1. To run.</div>
+<div class="row out l-out">  2. To move swiftly.</div>
+<div class="row out l-out">&#8203;</div>
+<div class="row out l-out"><span class="b">noun</span></div>
+<div class="row out l-out">  1. Act or instance of running, of moving rapidly using the feet.</div>
+<div class="row out l-out">     <span class="i">&quot;I just got back from my morning run.&quot;</span></div>
+<div class="row out l-out">  2. Act or instance of hurrying (to or from a place) (not necessarily by foot);</div>
+<div class="row out l-out">     dash or errand, trip.</div>
+<div class="row out l-out">     <span class="i">&quot;I need to make a run to the store.&quot;</span></div>
+<div class="row out l-out">&#8203;</div>
+<div class="row out l-out"><span class="b">adjective</span></div>
+<div class="row out l-out">  1. In a liquid state; melted or molten.</div>
+<div class="row out l-out">     <span class="i">&quot;Put some run butter on the vegetables.&quot;</span></div>
+<div class="row out l-out">  2. Cast in a mould.</div>
+<div class="row out l-out">&#8203;</div>
+<div class="row out l-out"><span class="dim">Showing 2 of 35 verb · 2 of 23 noun · 2 of 5 adjective definitions.</span></div>
+<div class="row out l-out"><span class="dim">See all: </span>camdict run --all</div>
+  <div class="row out l-out" id="l-p2"><span>$ </span><span class="caret" id="l-p2-c"></span></div>
+</div>
+    </div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const CHAR = 0.055;
+  function typeIn(sel, n, at) {
+    tl.fromTo(sel, { "--n": 0 }, { "--n": n, duration: n * CHAR, ease: "steps(" + n + ")" }, at);
+    return at + n * CHAR;
+  }
+  function blink(sel, from, to) {
+    for (let t = from, k = 0; t < to; t += 0.5, k++) tl.set(sel, { opacity: k % 2 ? 0 : 1 }, t);
+  }
+  function show(sel, at) { tl.set(sel, { opacity: 1 }, at); }
+  function hide(sel, at) { tl.set(sel, { opacity: 0 }, at); }
+  // Steps through overlapping glyph frames, like ora redrawing its spinner.
+  function cycle(prefix, count, from, to, step) {
+    let k = 0;
+    for (let t = from; t < to - 1e-6; t += step, k++) {
+      tl.set(prefix + (k % count), { opacity: 1 }, t);
+      tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, t);
+    }
+    tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, to);
+  }
+
+
+  blink("#l-p1-c", 0, 0.4);
+  tl.set("#l-p1-c", { opacity: 1 }, 0.4);
+  const typed1 = typeIn("#l-p1-t", 16, 0.4);
+  hide("#l-p1-c", 1.5);
+  show("#l-spin", 1.5);
+  cycle("#l-sp", 10, 1.5, 2.0, 0.08);
+  hide("#l-spin", 2.0);
+  show(".l-out", 2.0);
+  blink("#l-p2-c", 2.0, 5.8);
+
+    window.__timelines["lookup"] = tl;
+  </script>
+</template>

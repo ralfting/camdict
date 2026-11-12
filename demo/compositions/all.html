@@ -1,0 +1,200 @@
+<template>
+  <style>
+  #root { position: absolute; inset: 0; background: #7d8f7a; }
+  #root .win { position: absolute; left: 190px; top: 33px; width: 1540px; height: 1014px;
+    border-radius: 14px; overflow: hidden; background: #1c1e1f;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+  #root .bar { height: 46px; background: #2b2d2e; position: relative;
+    font: 400 20px/46px Inter, sans-serif; color: #9a9893; text-align: center; }
+  #root .dots { position: absolute; left: 20px; top: 16px; display: flex; gap: 9px; }
+  #root .dots span { width: 14px; height: 14px; border-radius: 50%; }
+  #root .screen { position: absolute; left: 50px; top: 68px; width: 1440px; height: 924px; overflow: hidden; }
+  #root .scroll { position: absolute; left: 0; top: 0; width: 100%; }
+  #root .row { height: 42px; font: 400 30px/42px "IBM Plex Mono", monospace; color: #e8e4da;
+    white-space: pre; }
+  #root .abs { position: absolute; left: 0; width: 100%; }
+  #root .out { opacity: 0; }
+  #root .b { font-weight: 700; }
+  #root .i { font-style: italic; }
+  #root .dim { color: rgba(232,228,218,.55); }
+  #root .inv { background: #e8e4da; color: #1c1e1f; }
+  #root .cyan { color: #6cc3c6; }
+  #root .typed { display: inline-block; vertical-align: top; overflow: hidden;
+    width: calc(var(--n, 0) * 1ch); }
+  #root .caret { display: inline-block; vertical-align: top; width: 1ch; height: 36px;
+    margin-top: 3px; background: #e8e4da; }
+  #root .frame { position: absolute; left: 0; top: 0; opacity: 0; }
+  #root .glyph { position: relative; display: inline-block; width: 1ch; height: 42px; vertical-align: top; }
+</style>
+  <div id="root" data-composition-id="all" data-width="1920" data-height="1080">
+    <div class="win">
+      <div class="bar" data-layout-ignore data-layout-allow-occlusion><div class="dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>camdict</div>
+      <div class="screen">
+  <div class="scroll" id="w-scroll" data-layout-allow-overflow>
+  <div class="row" id="w-p1"><span>$ </span><span class="typed" id="w-p1-t">camdict run --all</span><span class="caret" id="w-p1-c"></span></div>
+  <div class="row abs out" id="w-spin" style="top:42px"><span class="glyph"><span id="w-sp0" class="frame cyan">⠋</span><span id="w-sp1" class="frame cyan">⠙</span><span id="w-sp2" class="frame cyan">⠹</span><span id="w-sp3" class="frame cyan">⠸</span><span id="w-sp4" class="frame cyan">⠼</span><span id="w-sp5" class="frame cyan">⠴</span><span id="w-sp6" class="frame cyan">⠦</span><span id="w-sp7" class="frame cyan">⠧</span><span id="w-sp8" class="frame cyan">⠇</span><span id="w-sp9" class="frame cyan">⠏</span></span> Searching in dictionary...</div>
+  <div class="row out w-out"><span class="b inv"> run </span> /ɹʌn/</div>
+<div class="row out w-out">&#8203;</div>
+<div class="row out w-out"><span class="b">verb</span></div>
+<div class="row out w-out">   1. To run.</div>
+<div class="row out w-out">   2. To move swiftly.</div>
+<div class="row out w-out">   3. (fluids) To flow.</div>
+<div class="row out w-out">   4. (of a vessel) To sail before the wind, in distinction from reaching or</div>
+<div class="row out w-out">      sailing close-hauled.</div>
+<div class="row out w-out">   5. To control or manage, be in charge of.</div>
+<div class="row out w-out">      <span class="i">&quot;He is running the candidate&#x27;s expensive campaign.&quot;</span></div>
+<div class="row out w-out">   6. To be a candidate in an election.</div>
+<div class="row out w-out">      <span class="i">&quot;I have decided to run for governor of California.&quot;</span></div>
+<div class="row out w-out">   7. To make run in a race or an election.</div>
+<div class="row out w-out">      <span class="i">&quot;He ran his best horse in the Derby.&quot;</span></div>
+<div class="row out w-out">   8. To exert continuous activity; to proceed.</div>
+<div class="row out w-out">      <span class="i">&quot;to run through life; to run in a circle&quot;</span></div>
+<div class="row out w-out">   9. To be presented in the media.</div>
+<div class="row out w-out">      <span class="i">&quot;Her picture ran on the front page of the newspaper.&quot;</span></div>
+<div class="row out w-out">  10. To print or broadcast in the media.</div>
+<div class="row out w-out">      <span class="i">&quot;run a story; run an ad&quot;</span></div>
+<div class="row out w-out">  11. To smuggle (illegal goods).</div>
+<div class="row out w-out">      <span class="i">&quot;to run guns; to run rum&quot;</span></div>
+<div class="row out w-out">  12. To sort through a large volume of produce in quality control.</div>
+<div class="row out w-out">      <span class="i">&quot;Looks like we&#x27;re gonna have to run the tomatoes again.&quot;</span></div>
+<div class="row out w-out">  13. To extend or persist, statically or dynamically, through space or time.</div>
+<div class="row out w-out">  14. To execute or carry out a plan, procedure or program.</div>
+<div class="row out w-out">      <span class="i">&quot;Don&#x27;t run that software unless you have permission.&quot;</span></div>
+<div class="row out w-out">  15. To pass or go quickly in thought or conversation.</div>
+<div class="row out w-out">      <span class="i">&quot;to run from one subject to another&quot;</span></div>
+<div class="row out w-out">  16. To become different in a way mentioned (usually to become worse).</div>
+<div class="row out w-out">      <span class="i">&quot;Our supplies are running low.&quot;</span></div>
+<div class="row out w-out">  17. To cost a large amount of money.</div>
+<div class="row out w-out">      <span class="i">&quot;Buying a new laptop will run you a thousand dollars.&quot;</span></div>
+<div class="row out w-out">  18. Of stitches or stitched clothing, to unravel.</div>
+<div class="row out w-out">      <span class="i">&quot;My stocking is running.&quot;</span></div>
+<div class="row out w-out">  19. To pursue in thought; to carry in contemplation.</div>
+<div class="row out w-out">  20. To cause to enter; to thrust.</div>
+<div class="row out w-out">      <span class="i">&quot;to run a sword into or through the body; to run a nail into one&#x27;s foot&quot;</span></div>
+<div class="row out w-out">  21. To drive or force; to cause, or permit, to be driven.</div>
+<div class="row out w-out">  22. To cause to be drawn; to mark out; to indicate; to determine.</div>
+<div class="row out w-out">      <span class="i">&quot;to run a line&quot;</span></div>
+<div class="row out w-out">  23. To encounter or incur (a danger or risk).</div>
+<div class="row out w-out">      <span class="i">&quot;to run the risk of losing one&#x27;s life&quot;</span></div>
+<div class="row out w-out">  24. To put at hazard; to venture; to risk.</div>
+<div class="row out w-out">  25. To tease with sarcasms and ridicule.</div>
+<div class="row out w-out">  26. To sew (a seam) by passing the needle through material in a continuous</div>
+<div class="row out w-out">      line, generally taking a series of stitches on the needle at the same</div>
+<div class="row out w-out">      time.</div>
+<div class="row out w-out">  27. To control or have precedence in a card game.</div>
+<div class="row out w-out">      <span class="i">&quot;Every three or four hands he would run the table.&quot;</span></div>
+<div class="row out w-out">  28. To be in form thus, as a combination of words.</div>
+<div class="row out w-out">  29. To be popularly known; to be generally received.</div>
+<div class="row out w-out">  30. To have growth or development.</div>
+<div class="row out w-out">      <span class="i">&quot;Boys and girls run up rapidly.&quot;</span></div>
+<div class="row out w-out">  31. To tend, as to an effect or consequence; to incline.</div>
+<div class="row out w-out">  32. To have a legal course; to be attached; to continue in force, effect, or</div>
+<div class="row out w-out">      operation; to follow; to go in company.</div>
+<div class="row out w-out">      <span class="i">&quot;Certain covenants run with the land.&quot;</span></div>
+<div class="row out w-out">  33. To encounter or suffer (a particular, usually bad, fate or misfortune).</div>
+<div class="row out w-out">  34. To strike (the ball) in such a way as to cause it to run along the ground,</div>
+<div class="row out w-out">      as when approaching a hole.</div>
+<div class="row out w-out">  35. To speedrun.</div>
+<div class="row out w-out">&#8203;</div>
+<div class="row out w-out"><span class="b">noun</span></div>
+<div class="row out w-out">   1. Act or instance of running, of moving rapidly using the feet.</div>
+<div class="row out w-out">      <span class="i">&quot;I just got back from my morning run.&quot;</span></div>
+<div class="row out w-out">   2. Act or instance of hurrying (to or from a place) (not necessarily by</div>
+<div class="row out w-out">      foot); dash or errand, trip.</div>
+<div class="row out w-out">      <span class="i">&quot;I need to make a run to the store.&quot;</span></div>
+<div class="row out w-out">   3. A pleasure trip.</div>
+<div class="row out w-out">      <span class="i">&quot;Let&#x27;s go for a run in the car.&quot;</span></div>
+<div class="row out w-out">   4. Flight, instance or period of fleeing.</div>
+<div class="row out w-out">   5. Migration (of fish).</div>
+<div class="row out w-out">   6. A group of fish that migrate, or ascend a river for the purpose of</div>
+<div class="row out w-out">      spawning.</div>
+<div class="row out w-out">   7. A path taken by literal movement or figuratively</div>
+<div class="row out w-out">   8. An enclosure for an animal; a track or path along which something can</div>
+<div class="row out w-out">      travel.</div>
+<div class="row out w-out">      <span class="i">&quot;He set up a rabbit run.&quot;</span></div>
+<div class="row out w-out">   9. Rural landholding for farming, usually for running sheep, and operated by</div>
+<div class="row out w-out">      a runholder.</div>
+<div class="row out w-out">  10. State of being current; currency; popularity.</div>
+<div class="row out w-out">  11. Continuous or sequential</div>
+<div class="row out w-out">  12. A flow of liquid; a leak.</div>
+<div class="row out w-out">      <span class="i">&quot;The constant run of water from the faucet annoys me.&quot;</span></div>
+<div class="row out w-out">  13. (West Virginia) A small creek or part thereof. (Compare Southern US branch</div>
+<div class="row out w-out">      and New York and New England brook.)</div>
+<div class="row out w-out">      <span class="i">&quot;The military campaign near that creek was known as &quot;The battle of Bull</span></div>
+<div class="row out w-out">      <span class="i">Run&quot;.&quot;</span></div>
+<div class="row out w-out">  14. A quick pace, faster than a walk.</div>
+<div class="row out w-out">      <span class="i">&quot;He broke into a run.&quot;</span></div>
+<div class="row out w-out">  15. A sudden series of demands on a bank or other financial institution,</div>
+<div class="row out w-out">      especially characterised by great withdrawals.</div>
+<div class="row out w-out">      <span class="i">&quot;Financial insecurity led to a run on the banks, as customers feared for</span></div>
+<div class="row out w-out">      <span class="i">the security of their savings.&quot;</span></div>
+<div class="row out w-out">  16. Any sudden large demand for something.</div>
+<div class="row out w-out">      <span class="i">&quot;There was a run on Christmas presents.&quot;</span></div>
+<div class="row out w-out">  17. Various horizontal dimensions or surfaces</div>
+<div class="row out w-out">  18. A standard or unexceptional group or category.</div>
+<div class="row out w-out">      <span class="i">&quot;He stood out from the usual run of applicants.&quot;</span></div>
+<div class="row out w-out">  19. In sports</div>
+<div class="row out w-out">  20. A line of knit stitches that have unravelled, particularly in a nylon</div>
+<div class="row out w-out">      stocking.</div>
+<div class="row out w-out">      <span class="i">&quot;I have a run in my stocking.&quot;</span></div>
+<div class="row out w-out">  21. The stern of the underwater body of a ship from where it begins to curve</div>
+<div class="row out w-out">      upward and inward.</div>
+<div class="row out w-out">  22. The horizontal distance to which a drift may be carried, either by licence</div>
+<div class="row out w-out">      of the proprietor of a mine or by the nature of the formation; also, the</div>
+<div class="row out w-out">      direction which a vein of ore or other substance takes.</div>
+<div class="row out w-out">  23. A pair or set of millstones.</div>
+<div class="row out w-out">&#8203;</div>
+<div class="row out w-out"><span class="b">adjective</span></div>
+<div class="row out w-out">  1. In a liquid state; melted or molten.</div>
+<div class="row out w-out">     <span class="i">&quot;Put some run butter on the vegetables.&quot;</span></div>
+<div class="row out w-out">  2. Cast in a mould.</div>
+<div class="row out w-out">  3. Exhausted; depleted (especially with &quot;down&quot; or &quot;out&quot;).</div>
+<div class="row out w-out">  4. (of a zoology) Travelled, migrated; having made a migration or a spawning</div>
+<div class="row out w-out">     run.</div>
+<div class="row out w-out">  5. Smuggled.</div>
+<div class="row out w-out">     <span class="i">&quot;run brandy&quot;</span></div>
+  <div class="row out w-out" id="w-p2"><span>$ </span><span class="typed" id="w-p2-t">npm i -g camdict</span><span class="caret" id="w-p2-c"></span></div>
+  </div>
+</div>
+    </div>
+  </div>
+  <script>
+  const tl = gsap.timeline({ paused: true });
+  const CHAR = 0.055;
+  function typeIn(sel, n, at) {
+    tl.fromTo(sel, { "--n": 0 }, { "--n": n, duration: n * CHAR, ease: "steps(" + n + ")" }, at);
+    return at + n * CHAR;
+  }
+  function blink(sel, from, to) {
+    for (let t = from, k = 0; t < to; t += 0.5, k++) tl.set(sel, { opacity: k % 2 ? 0 : 1 }, t);
+  }
+  function show(sel, at) { tl.set(sel, { opacity: 1 }, at); }
+  function hide(sel, at) { tl.set(sel, { opacity: 0 }, at); }
+  // Steps through overlapping glyph frames, like ora redrawing its spinner.
+  function cycle(prefix, count, from, to, step) {
+    let k = 0;
+    for (let t = from; t < to - 1e-6; t += step, k++) {
+      tl.set(prefix + (k % count), { opacity: 1 }, t);
+      tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, t);
+    }
+    tl.set(prefix + ((k + count - 1) % count), { opacity: 0 }, to);
+  }
+
+
+  blink("#w-p1-c", 0, 0.3);
+  tl.set("#w-p1-c", { opacity: 1 }, 0.3);
+  typeIn("#w-p1-t", 17, 0.3);
+  hide("#w-p1-c", 1.4);
+  show("#w-spin", 1.4);
+  cycle("#w-sp", 10, 1.4, 1.8, 0.08);
+  hide("#w-spin", 1.8);
+  show(".w-out", 1.8);
+  tl.fromTo("#w-scroll", { y: 0 }, { y: -4200, duration: 0.8, ease: "steps(100)" }, 1.8);
+  blink("#w-p2-c", 2.6, 3.0);
+  tl.set("#w-p2-c", { opacity: 1 }, 3.0);
+  const typed4 = typeIn("#w-p2-t", 16, 3.0);
+  blink("#w-p2-c", typed4 + 0.3, 6.2);
+
+    window.__timelines["all"] = tl;
+  </script>
+</template>
