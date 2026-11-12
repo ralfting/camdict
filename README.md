@@ -6,7 +6,11 @@ CLI of Cambridge Dictionary
 
 ## Description
 
-A simple command line to use Cambridge Dictionary in the terminal
+A simple command line to look up English words in the terminal.
+
+> Definitions come from the [Free Dictionary API](https://dictionaryapi.dev/).
+> Cambridge Dictionary now blocks automated requests with a Cloudflare challenge,
+> so it can no longer be scraped.
 
 ## Getting Started
 
