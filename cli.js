@@ -2,6 +2,10 @@
 const yargs = require("yargs");
 const chalk = require("chalk");
 const ora = require("ora");
+const { spawn } = require("child_process");
+const fs = require("fs/promises");
+const os = require("os");
+const path = require("path");
 
 yargs
   .command({
@@ -21,11 +25,17 @@ yargs
     default: 3,
     describe: "Maximum definitions shown per part of speech",
   })
+  .option("audio", {
+    alias: "a",
+    type: "boolean",
+    default: false,
+    describe: "Play the pronunciation",
+  })
   .demandCommand(1, "You need at least one command before moving on")
   .help().argv;
 
 async function handler(argv) {
-  const { value, limit } = argv;
+  const { value, limit, audio } = argv;
   const spinner = ora("Searching in dictionary...").start();
 
   if (!value) {
@@ -48,6 +58,10 @@ async function handler(argv) {
 
     printHeader(value, getPhonetic(entries));
     groupMeanings(entries).forEach((meaning) => printMeaning(meaning, limit));
+
+    if (audio) {
+      await playPronunciation(entries);
+    }
   } catch (error) {
     spinner.stop();
     console.error("Error: " + error.message);
@@ -132,4 +146,130 @@ function printMeaning({ partOfSpeech, definitions }, limit) {
   if (hidden > 0) {
     console.log(chalk.gray(`  ...and ${hidden} more (use --limit to see them)`));
   }
+}
+
+// Wikimedia asks API clients to identify themselves.
+const USER_AGENT = "camdict (https://github.com/ralfting/camdict)";
+
+// Recordings with audio, US first since it is the most common accent asked for.
+function getRecordings(entries) {
+  const recordings = entries
+    .flatMap((entry) => entry.phonetics || [])
+    .filter(({ audio }) => audio);
+  const isUs = ({ audio }) => /-us\.mp3$/.test(audio);
+
+  return [
+    ...recordings.filter(isUs),
+    ...recordings.filter((recording) => !isUs(recording)),
+  ];
+}
+
+// The dictionary API's own media host stopped serving files, but every
+// recording links to its Wikimedia Commons page, which provides an MP3.
+async function getCommonsMp3Url(sourceUrl) {
+  const match = /[?&]curid=(\d+)/.exec(sourceUrl || "");
+
+  if (!match) {
+    return null;
+  }
+
+  const response = await fetch(
+    "https://commons.wikimedia.org/w/api.php?action=query&format=json" +
+      `&prop=videoinfo&viprop=url|mime|derivatives&pageids=${match[1]}`,
+    { headers: { "User-Agent": USER_AGENT } }
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const { query } = await response.json();
+  const page = query && query.pages && query.pages[match[1]];
+  const info = page && page.videoinfo && page.videoinfo[0];
+
+  if (!info) {
+    return null;
+  }
+
+  if (info.mime === "audio/mpeg") {
+    return info.url;
+  }
+
+  const mp3 = (info.derivatives || []).find(
+    ({ type }) => type === "audio/mpeg"
+  );
+
+  return mp3 ? mp3.src : null;
+}
+
+async function downloadPronunciation(entries) {
+  for (const { audio, sourceUrl } of getRecordings(entries)) {
+    const urls = [await getCommonsMp3Url(sourceUrl).catch(() => null), audio];
+
+    for (const url of urls.filter(Boolean)) {
+      const response = await fetch(url, {
+        headers: { "User-Agent": USER_AGENT },
+      }).catch(() => null);
+
+      if (response && response.ok) {
+        return Buffer.from(await response.arrayBuffer());
+      }
+    }
+  }
+
+  return null;
+}
+
+const AUDIO_PLAYERS = [
+  ...(process.platform === "darwin" ? [["afplay"]] : []),
+  ["mpg123", "-q"],
+  ["ffplay", "-nodisp", "-autoexit", "-loglevel", "quiet"],
+  ["mpv", "--no-video", "--really-quiet"],
+];
+
+async function playPronunciation(entries) {
+  const spinner = ora("Fetching pronunciation...").start();
+  const sound = await downloadPronunciation(entries).finally(() =>
+    spinner.stop()
+  );
+
+  if (!sound) {
+    console.warn(chalk.yellow("\nNo pronunciation audio available for this word."));
+    return;
+  }
+
+  const file = path.join(os.tmpdir(), `camdict-${process.pid}.mp3`);
+  await fs.writeFile(file, sound);
+
+  try {
+    for (const [command, ...args] of AUDIO_PLAYERS) {
+      if (await runPlayer(command, [...args, file])) {
+        return;
+      }
+    }
+
+    console.warn(
+      chalk.yellow(
+        "\nNo audio player found. Install mpg123, ffmpeg (ffplay) or mpv to hear pronunciations."
+      )
+    );
+  } finally {
+    await fs.rm(file, { force: true });
+  }
+}
+
+// Resolves false when the player is not installed so the next one is tried.
+function runPlayer(command, args) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: "ignore" });
+
+    child.on("error", (error) =>
+      error.code === "ENOENT" ? resolve(false) : reject(error)
+    );
+    child.on("close", (code) =>
+      code === 0
+        ? resolve(true)
+        : reject(new Error(`${command} exited with code ${code}`))
+    );
+  });
 }
