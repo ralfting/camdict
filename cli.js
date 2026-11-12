@@ -25,6 +25,11 @@ yargs
     default: 3,
     describe: "Maximum definitions shown per part of speech",
   })
+  .option("all", {
+    type: "boolean",
+    default: false,
+    describe: "Show every definition (ignores --limit)",
+  })
   .option("audio", {
     alias: "a",
     type: "boolean",
@@ -35,7 +40,8 @@ yargs
   .help().argv;
 
 async function handler(argv) {
-  const { value, limit, audio } = argv;
+  const { value, audio, all } = argv;
+  const limit = all ? Infinity : Math.max(1, argv.limit);
   const spinner = ora("Searching in dictionary...").start();
 
   if (!value) {
@@ -57,7 +63,10 @@ async function handler(argv) {
     }
 
     printHeader(value, getPhonetic(entries));
-    groupMeanings(entries).forEach((meaning) => printMeaning(meaning, limit));
+    const meanings = groupMeanings(entries);
+
+    meanings.forEach((meaning) => printMeaning(meaning, limit));
+    printHiddenSummary(value, meanings, limit);
 
     if (audio) {
       await playPronunciation(entries);
@@ -132,8 +141,7 @@ function printHeader(value, phonetic) {
 }
 
 function printMeaning({ partOfSpeech, definitions }, limit) {
-  const shown = definitions.slice(0, Math.max(1, limit));
-  const hidden = definitions.length - shown.length;
+  const shown = definitions.slice(0, limit);
   const numberWidth = String(shown.length).length;
 
   console.log("\n" + chalk.bold(partOfSpeech));
@@ -148,15 +156,27 @@ function printMeaning({ partOfSpeech, definitions }, limit) {
       printWrapped(`"${example}"`, indent, " ".repeat(indent), chalk.italic);
     }
   });
+}
 
-  if (hidden > 0) {
-    printWrapped(
-      `...and ${hidden} more (use --limit to see them)`,
-      2,
-      "  ",
-      chalk.dim
-    );
+// One summary at the end instead of a hint per section, and only for the
+// parts of speech that were cut, followed by the exact command to see all.
+function printHiddenSummary(value, meanings, limit) {
+  const cut = meanings.filter(({ definitions }) => definitions.length > limit);
+
+  if (!cut.length) {
+    return;
   }
+
+  const counts = cut
+    .map(({ partOfSpeech, definitions }) =>
+      `${limit} of ${definitions.length} ${partOfSpeech}`
+    )
+    .join(" · ");
+  const word = /^[\w-]+$/.test(value) ? value : `"${value}"`;
+
+  console.log();
+  printWrapped(`Showing ${counts} definitions.`, 0, "", chalk.dim);
+  console.log(chalk.dim("See all: ") + `camdict ${word} --all`);
 }
 
 // Long lines are wrapped here, instead of by the terminal, so continuation
