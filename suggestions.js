@@ -1,13 +1,15 @@
+const USER_AGENT = require("./lib/user-agent");
+
 const MAX_SUGGESTIONS = 3;
 const MIN_FREQUENCY_PER_MILLION = 1;
 const TIMEOUT_MS = 3000;
 
-async function getSuggestions(value, userAgent) {
+async function getSuggestions(value) {
   try {
     const response = await fetch(
       `https://api.datamuse.com/words?sp=${encodeURIComponent(value)}&md=df&max=10`,
       {
-        headers: { "User-Agent": userAgent },
+        headers: { "User-Agent": USER_AGENT },
         signal: AbortSignal.timeout(TIMEOUT_MS),
       }
     );

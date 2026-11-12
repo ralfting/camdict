@@ -33,6 +33,7 @@
   },
   "files": [
     "cli.js",
-    "suggestions.js"
+    "suggestions.js",
+    "lib/"
   ]
 }

@@ -7,6 +7,7 @@ const fs = require("fs/promises");
 const os = require("os");
 const path = require("path");
 const { getSuggestions } = require("./suggestions");
+const USER_AGENT = require("./lib/user-agent");
 
 // chalk 4 ignores the NO_COLOR convention (https://no-color.org), so apply
 // it here. FORCE_COLOR still wins, matching Node's own behavior.
@@ -63,7 +64,7 @@ async function handler(argv) {
 
   try {
     const entries = await getWordEntries(value);
-    const suggestions = entries ? [] : await getSuggestions(value, USER_AGENT);
+    const suggestions = entries ? [] : await getSuggestions(value);
     spinner.stop();
 
     if (!entries) {
@@ -265,9 +266,6 @@ function printWrapped(text, indent, firstPrefix, style = (line) => line) {
     console.log(prefix + style(content));
   });
 }
-
-// Wikimedia asks API clients to identify themselves.
-const USER_AGENT = "camdict (https://github.com/ralfting/camdict)";
 
 // Recordings with audio, US first since it is the most common accent asked for.
 function getRecordings(entries) {
