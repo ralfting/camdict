@@ -8,12 +8,10 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "cheerio": "^1.0.0-rc.3",
     "node-fetch": "^2.6.0",
     "ora": "^5.0.0",
     "yargs": "^15.4.1"
   },
-  "devDependencies": {},
   "scripts": {},
   "keywords": [
     "dictionary"
