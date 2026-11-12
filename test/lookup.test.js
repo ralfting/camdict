@@ -28,6 +28,10 @@ test("shows the transcription that has a recording over the entry's bare one", (
   assert.equal(firstLine(runCli(["wonderful"]).stdout), " wonderful  /ˈwʌn.dɚ.fl̩/");
 });
 
+test("without a recording, prefers the entry's own transcription over the first listed", () => {
+  assert.equal(firstLine(runCli(["tomato"]).stdout), " tomato  /təˈmɑːtəʊ/");
+});
+
 test("prints only the headword when the dictionary has no transcription", () => {
   assert.equal(firstLine(runCli(["give up"]).stdout), " give up ");
 });
