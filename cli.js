@@ -62,11 +62,13 @@ async function handler(argv) {
       return;
     }
 
-    printHeader(value, getPhonetic(entries));
+    const headword = entries[0].word || value;
+
+    printHeader(headword, getPhonetic(entries));
     const meanings = groupMeanings(entries);
 
     meanings.forEach((meaning) => printMeaning(meaning, limit));
-    printHiddenSummary(value, meanings, limit);
+    printHiddenSummary(headword, meanings, limit);
 
     if (audio) {
       await playPronunciation(entries);
@@ -132,10 +134,13 @@ function getPhonetic(entries) {
   );
 }
 
-function printHeader(value, phonetic) {
+// Shows the dictionary's headword rather than the raw input, so "RUNNING"
+// reads as "running". Not uppercased: all-caps is harder to read, and phrases
+// suffer most.
+function printHeader(headword, phonetic) {
   // inverse swaps the theme's own foreground and background, so the badge has
   // the same contrast as body text in any theme, unlike a fixed bgWhite.
-  const word = chalk.inverse.bold(` ${value.toUpperCase()} `);
+  const word = chalk.inverse.bold(` ${headword} `);
 
   console.log(phonetic ? `${word} ${phonetic}` : word);
 }
