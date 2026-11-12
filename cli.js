@@ -7,6 +7,12 @@ const fs = require("fs/promises");
 const os = require("os");
 const path = require("path");
 
+// chalk 4 ignores the NO_COLOR convention (https://no-color.org), so apply
+// it here. FORCE_COLOR still wins, matching Node's own behavior.
+if (process.env.NO_COLOR && process.env.FORCE_COLOR === undefined) {
+  chalk.level = 0;
+}
+
 // Declared before yargs runs: the handler starts synchronously while parsing.
 const REQUEST_TIMEOUT_MS = 10000;
 
@@ -52,7 +58,7 @@ async function handler(argv) {
     return;
   }
 
-  const spinner = ora("Searching in dictionary...").start();
+  const spinner = startSpinner("Searching in dictionary...");
 
   try {
     const entries = await getWordEntries(value);
@@ -78,6 +84,11 @@ async function handler(argv) {
     spinner.stop();
     printError(error.message);
   }
+}
+
+// ora colors its frames itself, so pass the color decision along.
+function startSpinner(text) {
+  return ora({ text, color: chalk.level > 0 ? "cyan" : false }).start();
 }
 
 // Only the label is colored; the message keeps the theme's text color so
@@ -321,7 +332,7 @@ const AUDIO_PLAYERS = [
 ];
 
 async function playPronunciation(entries) {
-  const spinner = ora("Fetching pronunciation...").start();
+  const spinner = startSpinner("Fetching pronunciation...");
   const sound = await downloadPronunciation(entries).finally(() =>
     spinner.stop()
   );
