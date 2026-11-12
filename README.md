@@ -2,7 +2,7 @@
 
 English dictionary in your terminal.
 
-![Camdict demo: looking up "run", playing the pronunciation of "wrap up", and listing every definition](docs/demo.gif)
+![Looking up "pizza", then the phrase "give up", in camdict](docs/demo-basics.gif)
 
 ## Features
 
@@ -17,30 +17,6 @@ English dictionary in your terminal.
 - Errors go to stderr with exit code 1, and camdict never wraps piped output,
   so it works in scripts.
 
-```
-$ camdict run -n 2
- run  /ɹʌn/
-
-verb
-  1. To run.
-  2. To move swiftly.
-
-noun
-  1. Act or instance of running, of moving rapidly using the feet.
-     "I just got back from my morning run."
-  2. Act or instance of hurrying (to or from a place) (not necessarily
-     by foot); dash or errand, trip.
-     "I need to make a run to the store."
-
-adjective
-  1. In a liquid state; melted or molten.
-     "Put some run butter on the vegetables."
-  2. Cast in a mould.
-
-Showing 2 of 35 verb · 2 of 23 noun · 2 of 5 adjective definitions.
-See all: camdict run --all
-```
-
 ## Installing
 
 Requires Node.js 22 or newer.
@@ -54,14 +30,40 @@ Windows, install `mpg123`, `ffmpeg` or `mpv` first.
 
 ## Usage
 
+### Look up a word or phrase
+
 ```
-camdict <word>            # camdict house
-camdict "<phrase>"        # camdict "wrap up"
-camdict <word> --audio    # also play the pronunciation (alias -a)
-camdict <word> -n 10      # up to 10 definitions per part of speech (default 3)
-camdict <word> --all      # every definition
-camdict --help
+camdict pizza
+camdict "give up"
 ```
+
+Put a phrase in quotes so your shell passes it as one argument.
+
+### Hear the pronunciation
+
+![Running camdict wonderful -a: the definitions print, then the pronunciation plays](docs/demo-audio.gif)
+
+Add `-a` (or `--audio`). Camdict prints the definitions, then plays the
+recording through your speakers.
+
+```
+camdict wonderful -a
+```
+
+### Choose how many definitions
+
+![Running camdict library -n 1, then camdict library --all](docs/demo-options.gif)
+
+Camdict shows 3 definitions per part of speech. `-n` changes that number and
+`--all` shows every one. When definitions are cut, the last lines say how many
+it hid and print the command that shows them all.
+
+```
+camdict library -n 1
+camdict library --all
+```
+
+### All options
 
 | Option | Alias | Default | Description |
 |---|---|---|---|
@@ -69,9 +71,7 @@ camdict --help
 | `--limit` | `-n` | `3` | Maximum definitions shown per part of speech |
 | `--all` | | `false` | Show every definition (overrides `--limit`) |
 | `--no-color` | | | Disable colors and styles (same as `NO_COLOR=1`) |
-
-When `--limit` cuts definitions, the last lines say how many it hid and print
-the command that shows them all.
+| `--help` | | | Show usage |
 
 ### Exit codes
 
