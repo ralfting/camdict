@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 const yargs = require("yargs");
-const fetch = require("node-fetch");
-const cheerio = require("cheerio");
 const chalk = require("chalk");
 const ora = require("ora");
 
@@ -32,57 +30,69 @@ async function handler(argv) {
   }
 
   try {
-    const response = await getWordMean(value);
+    const entry = await getWordEntry(value);
+    spinner.stop();
 
-    if (isWordNotFound(response)) {
-      throw `Word ${chalk.underline(value)} not found, try another one...`;
+    if (!entry) {
+      console.error(
+        `Error: Word ${chalk.underline(value)} not found, try another one...`
+      );
+      return;
     }
 
-    spinner.stop();
-    const $ = cheerio.load(await response.text());
+    const meaning = entry.meanings[0];
 
-    getHeader(value, $);
-    getDescription($);
-    getExamples($);
+    getHeader(value, meaning);
+    getDescription(meaning);
+    getExamples(meaning);
   } catch (error) {
     spinner.stop();
-    console.error("Error: " + error);
+    console.error("Error: " + error.message);
   }
 }
 
-async function getWordMean(value) {
+async function getWordEntry(value) {
   const response = await fetch(
-    `https://dictionary.cambridge.org/dictionary/english/${value}`
+    `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(value)}`
   );
 
-  return response;
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Dictionary service unavailable (HTTP ${response.status})`);
+  }
+
+  const [entry] = await response.json();
+
+  return entry && entry.meanings && entry.meanings.length ? entry : null;
 }
 
-function getDescription($) {
-  const defination = $(".ddef_d").first().text().trim();
+function getDescription(meaning) {
+  const definition = meaning.definitions[0].definition;
 
-  if (defination) {
-    console.log("Definition:", defination);
+  if (definition) {
+    console.log("Definition:", definition);
   }
 }
 
-function getHeader(value, $) {
+function getHeader(value, meaning) {
   const word = chalk.bgWhite.black(value.toUpperCase());
-  const type = chalk.underline.gray($(".pos.dpos").first().text());
+  const type = chalk.underline.gray(meaning.partOfSpeech);
 
   console.log(`${word} (${type})`);
 }
 
-function getExamples($) {
-  const exampleWord = chalk.bgWhite.black("\nExamples");
-  const examples = $(".def-body.ddef_b").first().find(".examp");
+function getExamples(meaning) {
+  const examples = meaning.definitions
+    .map((definition) => definition.example)
+    .filter(Boolean);
 
-  console.log(exampleWord);
-  examples.each((_idx, el) => console.log("- " + $(el).text().trim()));
-}
+  if (!examples.length) {
+    return;
+  }
 
-function isWordNotFound(response) {
-  return (
-    response.url === "https://dictionary.cambridge.org/dictionary/english/"
-  );
+  console.log(chalk.bgWhite.black("\nExamples"));
+  examples.forEach((example) => console.log("- " + example));
 }
