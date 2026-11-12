@@ -32,6 +32,7 @@
     "node": ">=22"
   },
   "files": [
-    "cli.js"
+    "cli.js",
+    "suggestions.js"
   ]
 }

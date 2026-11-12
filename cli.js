@@ -6,6 +6,7 @@ const { spawn } = require("child_process");
 const fs = require("fs/promises");
 const os = require("os");
 const path = require("path");
+const { getSuggestions } = require("./suggestions");
 
 // chalk 4 ignores the NO_COLOR convention (https://no-color.org), so apply
 // it here. FORCE_COLOR still wins, matching Node's own behavior.
@@ -62,10 +63,12 @@ async function handler(argv) {
 
   try {
     const entries = await getWordEntries(value);
+    const suggestions = entries ? [] : await getSuggestions(value, USER_AGENT);
     spinner.stop();
 
     if (!entries) {
       printError(`No definitions found for "${value}".`);
+      printSuggestions(suggestions);
       return;
     }
 
@@ -98,6 +101,14 @@ function printError(message) {
   process.exitCode = 1;
 }
 
+function printSuggestions(words) {
+  if (!words.length) {
+    return;
+  }
+
+  console.error(chalk.dim("Did you mean: ") + words.join(" · "));
+  console.error(chalk.dim("Try: ") + `camdict ${quoteArg(words[0])}`);
+}
 
 async function getWordEntries(value) {
   const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(value)}`;
@@ -210,11 +221,14 @@ function printHiddenSummary(value, meanings, limit) {
       `${limit} of ${definitions.length} ${partOfSpeech}`
     )
     .join(" · ");
-  const word = /^[\w-]+$/.test(value) ? value : `"${value}"`;
 
   console.log();
   printWrapped(`Showing ${counts} definitions.`, 0, "", chalk.dim);
-  console.log(chalk.dim("See all: ") + `camdict ${word} --all`);
+  console.log(chalk.dim("See all: ") + `camdict ${quoteArg(value)} --all`);
+}
+
+function quoteArg(value) {
+  return /^[\w-]+$/.test(value) ? value : `"${value}"`;
 }
 
 // Long lines are wrapped here, instead of by the terminal, so continuation
