@@ -103,7 +103,8 @@ function printError(message) {
 // Datamuse marks common misspellings with a "Misspelling of X." definition,
 // and that is the only way to reach X when it is not among the close
 // spellings it returns (recieve -> receive). Words rarer than once per
-// million are dropped as too obscure to be what the user meant. Resolves
+// million are dropped as too obscure to be what the user meant, and the rest
+// go most common first, so "pizzza" offers pizza before piazza. Resolves
 // empty on any failure, since the lookup has already failed and only the
 // hint is lost.
 async function getSuggestions(value) {
@@ -127,6 +128,7 @@ async function getSuggestions(value) {
     );
     const common = rows
       .filter((row) => frequency(row) >= 1)
+      .sort((a, b) => frequency(b) - frequency(a))
       .map(({ word }) => word);
     const input = value.toLowerCase();
 
