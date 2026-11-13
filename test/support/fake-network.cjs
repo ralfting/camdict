@@ -47,7 +47,8 @@ globalThis.fetch = async (input, options = {}) => {
 
   if (hostname === "api.dictionaryapi.dev" && pathname.startsWith("/api/")) {
     if (FAKE_NETWORK === "dictionary-500") return respond("{}", 500);
-    const word = decodeURIComponent(path.basename(pathname)).replace(/ /g, "_");
+    // The real API ignores case: RUNNING returns the entries for "running".
+    const word = decodeURIComponent(path.basename(pathname)).toLowerCase().replace(/ /g, "_");
     const body = fixture(`dict-${word}.json`);
     return body ? respond(body) : respond('{"title":"No Definitions Found"}', 404);
   }

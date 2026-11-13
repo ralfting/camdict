@@ -37,9 +37,9 @@ test("prints only the headword when the dictionary has no transcription", () => 
 });
 
 test("shows the dictionary's headword instead of the word as typed", () => {
-  const { stdout, requests } = runCli(["RUNNING"]);
+  const { stdout, requests } = runCli(["RUN"]);
 
-  assert.equal(requests[0].url, "https://api.dictionaryapi.dev/api/v2/entries/en/RUNNING");
+  assert.equal(requests[0].url, "https://api.dictionaryapi.dev/api/v2/entries/en/RUN");
   assert.equal(firstLine(stdout), " run  /ɹʌn/");
 });
 
