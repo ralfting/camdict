@@ -35,6 +35,6 @@
   },
   "files": [
     "cli.js",
-    "suggestions.js"
+    "lib/"
   ]
 }
