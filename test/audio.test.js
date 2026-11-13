@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const path = require("node:path");
 const { runCli } = require("./support/run-cli");
+const { commonsPage } = require("./support/factories");
 
 const USER_AGENT = "camdict (https://github.com/ralfting/camdict)";
 const PLAYER =
@@ -36,8 +37,22 @@ test("prefers the US recording, played from Wikimedia Commons' MP3", () => {
 
   assert.equal(
     played[0].sound,
-    "MP3 from https://upload.wikimedia.org/wikipedia/commons/0/0a/En-us-house.mp3"
+    "MP3 from https://upload.wikimedia.org/wikipedia/commons/transcoded/5/55/En-us-house-noun.ogg/En-us-house-noun.ogg.mp3"
   );
+});
+
+test("plays the Commons original when it is already an MP3", () => {
+  const { played } = runCli(["house", "-a", "-n", "1"], {
+    responses: {
+      "commons-711134": commonsPage("711134", {
+        mime: "audio/mpeg",
+        url: "https://upload.wikimedia.org/original/house.mp3",
+        derivatives: [{ type: "audio/mpeg", src: "https://upload.wikimedia.org/derived/house.mp3" }],
+      }),
+    },
+  });
+
+  assert.equal(played[0].sound, "MP3 from https://upload.wikimedia.org/original/house.mp3");
 });
 
 test("plays Commons' MP3 rendition when the original file is not an MP3", () => {
