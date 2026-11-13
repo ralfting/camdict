@@ -30,17 +30,24 @@ function readJsonLines(file) {
     .map((line) => JSON.parse(line));
 }
 
-function runCli(args, { env = {}, players = true } = {}) {
+// responses maps a fixture name, such as "dict-tomato", to the body the fake
+// network returns for it, so a test can state the exact shape it relies on.
+function runCli(args, { env = {}, players = true, responses = {} } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "camdict-test-"));
   const bin = path.join(dir, "bin");
   const tmpDir = path.join(dir, "tmp");
   const requestLog = path.join(dir, "requests.jsonl");
   const playerLog = path.join(dir, "player.jsonl");
+  const responsesDir = path.join(dir, "responses");
 
   fs.mkdirSync(bin);
   fs.mkdirSync(tmpDir);
   fs.writeFileSync(requestLog, "");
   fs.writeFileSync(playerLog, "");
+  fs.mkdirSync(responsesDir);
+  for (const [name, body] of Object.entries(responses)) {
+    fs.writeFileSync(path.join(responsesDir, `${name}.json`), JSON.stringify(body));
+  }
 
   if (players) {
     for (const name of ["afplay", "mpg123", "ffplay", "mpv"]) {
@@ -57,6 +64,7 @@ function runCli(args, { env = {}, players = true } = {}) {
         TMPDIR: tmpDir,
         FAKE_REQUEST_LOG: requestLog,
         FAKE_PLAYER_LOG: playerLog,
+        FAKE_RESPONSES_DIR: responsesDir,
         ...env,
       },
     });

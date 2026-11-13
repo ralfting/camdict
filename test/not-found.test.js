@@ -1,6 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { runCli } = require("./support/run-cli");
+const { dictionaryEntries } = require("./support/factories");
 
 test("a misspelled word exits 1 and suggests close spellings with a command to try", () => {
   const { stdout, stderr, code } = runCli(["pizzza"]);
@@ -29,7 +30,9 @@ test("prints only the error when there is nothing to suggest", () => {
 });
 
 test("an entry with no meanings counts as not found", () => {
-  const { stdout, stderr, code } = runCli(["nomeanings"]);
+  const { stdout, stderr, code } = runCli(["nomeanings"], {
+    responses: { "dict-nomeanings": dictionaryEntries({ word: "nomeanings", meanings: [] }) },
+  });
 
   assert.equal(code, 1);
   assert.equal(stdout, "");

@@ -1,6 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { runCli } = require("./support/run-cli");
+const { dictionaryEntries } = require("./support/factories");
 
 const firstLine = (text) => text.split("\n")[0];
 
@@ -29,7 +30,15 @@ test("shows the transcription that has a recording over the entry's bare one", (
 });
 
 test("without a recording, prefers the entry's own transcription over the first listed", () => {
-  assert.equal(firstLine(runCli(["tomato"]).stdout), " tomato  /təˈmɑːtəʊ/");
+  const responses = {
+    "dict-tomato": dictionaryEntries({
+      word: "tomato",
+      phonetic: "/təˈmɑːtəʊ/",
+      phonetics: [{ text: "/təˈmeɪtoʊ/", audio: "" }],
+    }),
+  };
+
+  assert.equal(firstLine(runCli(["tomato"], { responses }).stdout), " tomato  /təˈmɑːtəʊ/");
 });
 
 test("prints only the headword when the dictionary has no transcription", () => {

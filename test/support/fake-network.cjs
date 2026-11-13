@@ -6,7 +6,7 @@ const path = require("path");
 const tty = require("tty");
 
 const FIXTURES = path.join(__dirname, "..", "fixtures");
-const { FAKE_NETWORK, FAKE_REQUEST_LOG, FAKE_COLUMNS } = process.env;
+const { FAKE_NETWORK, FAKE_REQUEST_LOG, FAKE_COLUMNS, FAKE_RESPONSES_DIR } = process.env;
 
 if (FAKE_COLUMNS) {
   process.stdout.isTTY = true;
@@ -16,9 +16,11 @@ if (FAKE_COLUMNS) {
   tty.isatty = (fd) => fd === 1 || isatty(fd);
 }
 
+// A response built by the test itself wins over the recorded fixture.
 function fixture(name) {
-  const file = path.join(FIXTURES, name);
-  return fs.existsSync(file) ? fs.readFileSync(file, "utf8") : null;
+  const dirs = FAKE_RESPONSES_DIR ? [FAKE_RESPONSES_DIR, FIXTURES] : [FIXTURES];
+  const file = dirs.map((dir) => path.join(dir, name)).find((f) => fs.existsSync(f));
+  return file ? fs.readFileSync(file, "utf8") : null;
 }
 
 function respond(body, status = 200) {
