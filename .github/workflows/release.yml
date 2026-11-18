@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Which part of the version to bump
+        type: choice
+        options: [patch, minor, major]
+        required: true
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Guard against starting a release from another branch by mistake.
+    # It does not stop a branch that edits this file; see ADR 0001.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing (OIDC) needs npm 11.5.1 or later.
+      - run: npm install -g npm@^11.5.1
+
+      # No install scripts: dependencies must not run code while the OIDC token is available.
+      - run: npm ci --ignore-scripts
+      - run: npm test
+
+      - name: Bump version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          previous=$(node -p "require('./package.json').version")
+          npm version ${{ inputs.bump }} -m "Bump: $previous to %s"
+
+      # Push before publishing: if main rejects the push, nothing reaches npm.
+      - run: git push --atomic --follow-tags origin HEAD:main
+
+      - run: npm publish
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          gh release create "v$version" --verify-tag --generate-notes --draft
